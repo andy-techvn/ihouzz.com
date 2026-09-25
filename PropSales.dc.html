@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;600;700&amp;display=swap">
+<style>
+html,body{margin:0}
+body{font-family:"Be Vietnam Pro",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+button,input,select,textarea{font-family:inherit}
+h1,h2,h3,p{margin:0}
+a{color:#9cc4ea;text-decoration:none}
+a:hover{color:#fff}
+@keyframes psPulse{0%{box-shadow:0 0 0 0 rgba(244,196,90,.7)}100%{box-shadow:0 0 0 10px rgba(244,196,90,0)}}
+@keyframes psBlink{0%,100%{opacity:1}50%{opacity:.35}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;color:#eef2f7;background:radial-gradient(ellipse 80% 50% at 70% -10%,rgba(18,98,164,.35),rgba(6,10,20,0) 70%),#060a14;overflow-x:hidden">
+
+<sc-if value="{{ showHeader }}" hint-placeholder-val="{{ false }}">
+<header style="position:sticky;top:0;z-index:20;background:rgba(6,10,20,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid #16223a">
+  <div style="max-width:1280px;margin:0 auto;padding:14px clamp(20px,4vw,48px);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="font-size:20px;font-weight:700;letter-spacing:-.04em;color:#fff">iHouzz</span>
+      <span style="width:1px;height:18px;background:#24304b"></span>
+      <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13px;font-weight:600;letter-spacing:.08em;color:#9cc4ea">PROPSALES</span>
+    </div>
+    <nav style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+      <a href="#core" style="padding:8px 12px;font-size:14px;font-weight:500;color:#c3cfdc">Cơ chế</a>
+      <a href="#industry" style="padding:8px 12px;font-size:14px;font-weight:500;color:#c3cfdc">Đổi ngành</a>
+      <a href="#proof" style="padding:8px 12px;font-size:14px;font-weight:500;color:#c3cfdc">Kết quả</a>
+      <button onClick="{{ openDemo }}" style="margin-left:6px;border:0;cursor:pointer;padding:9px 16px;border-radius:8px;background:#fff;color:#060a14;font-size:14px;font-weight:700" style-hover="background:#dbe8f5">Đặt lịch demo</button>
+    </nav>
+  </div>
+</header>
+</sc-if>
+
+<section data-screen-label="Hero" style="max-width:1280px;margin:0 auto;padding:clamp(40px,6vw,88px) clamp(20px,4vw,48px) clamp(48px,6vw,80px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:clamp(32px,4vw,64px);align-items:start">
+  <div style="display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;font-weight:600;letter-spacing:.14em;color:#9cc4ea"><span style="width:8px;height:8px;border-radius:50%;background:#4FD39A;box-shadow:0 0 12px #4FD39A;animation:psBlink 1.6s infinite"></span>PROPSALES · BACKEND BÁN HÀNG REALTIME CỦA IHOUZZ</div>
+    <h1 style="font-size:clamp(38px,5.2vw,68px);line-height:1.04;letter-spacing:-.045em;font-weight:700;color:#fff;text-wrap:balance">Doanh nghiệp của bạn đang bán hàng như thế này?</h1>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;font-weight:600;letter-spacing:.12em;color:#8193a8">ĐÁNH DẤU NHỮNG ĐIỀU ĐÚNG VỚI BẠN</span>
+      <sc-for list="{{ checks }}" as="c" hint-placeholder-count="5">
+        <button onClick="{{ c.toggle }}" aria-pressed="{{ c.pressed }}" style="display:flex;align-items:flex-start;gap:14px;text-align:left;cursor:pointer;padding:14px 16px;border-radius:12px;border:1px solid {{ c.bd }};background:{{ c.bg }};color:#eef2f7;font-size:16px;line-height:1.5" style-hover="border-color:#5aa2e8">
+          <span style="flex:none;width:22px;height:22px;margin-top:1px;border-radius:6px;border:1.5px solid {{ c.box }};background:{{ c.fill }};display:grid;place-items:center;color:#060a14;font-size:14px;font-weight:800">{{ c.mark }}</span>
+          <span>{{ c.text }}</span>
+        </button>
+      </sc-for>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:16px;background:linear-gradient(135deg,rgba(47,127,216,.22),rgba(47,127,216,.06));border:1px solid rgba(90,162,232,.35)">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <span style="font-size:22px;font-weight:700;letter-spacing:-.02em;color:#fff">{{ verdict }}</span>
+        <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13px;font-weight:600;color:#9cc4ea">{{ score }} / 5</span>
+      </div>
+      <p style="font-size:15px;line-height:1.6;color:#c3cfdc;text-wrap:pretty">Đã chạy thật với 100+ đại lý trên một giỏ hàng, có lúc 200 tài khoản cùng bấm một món, hết giỏ hàng giai đoạn đầu trong 3 giờ.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button onClick="{{ openDemo }}" style="border:0;cursor:pointer;padding:13px 20px;border-radius:9px;background:#fff;color:#060a14;font-weight:700;font-size:15px;white-space:nowrap" style-hover="background:#dbe8f5">Đặt lịch demo</button>
+        <a href="mailto:andy@ihouzz.com" style="padding:13px 18px;border-radius:9px;border:1px solid #2a3a50;color:#fff;font-weight:600;font-size:15px;white-space:nowrap" style-hover="border-color:#5aa2e8">Andy · 0964 585 584</a>
+      </div>
+    </div>
+  </div>
+
+  <div ref="{{ consoleRef }}" style="position:sticky;top:88px;display:flex;flex-direction:column;gap:14px;padding:18px;border-radius:20px;background:rgba(12,19,34,.82);border:1px solid #1c2a44;box-shadow:0 40px 80px -40px rgba(0,0,0,.8),0 0 0 1px rgba(90,162,232,.06) inset">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="width:9px;height:9px;border-radius:50%;background:#ff5a4e;animation:psBlink 1.2s infinite"></span>
+        <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.12em;color:#F4C45A">GIỎ HÀNG TRỰC TIẾP</span>
+      </div>
+      <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;color:#8193a8">{{ online }} {{ ind.sellerLower }} đang online · {{ clock }}</span>
+    </div>
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <span style="font-size:22px;font-weight:700;letter-spacing:-.02em;color:#fff">{{ ind.cart }}</span>
+      <div style="display:flex;gap:4px;padding:3px;border-radius:9px;background:#0a1120;border:1px solid #1c2a44">
+        <sc-for list="{{ industries }}" as="t" hint-placeholder-count="5">
+          <button onClick="{{ t.pick }}" style="border:0;cursor:pointer;padding:6px 10px;border-radius:7px;font-size:12.5px;font-weight:600;white-space:nowrap;background:{{ t.bg }};color:{{ t.fg }}">{{ t.short }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+      <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+        <div style="padding:10px 12px;border-radius:10px;background:#0e1628;border:1px solid #1c2a44;display:flex;flex-direction:column;gap:4px;min-width:0">
+          <span style="font-size:11.5px;color:#8193a8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.label }}</span>
+          <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:24px;font-weight:700;color:{{ s.color }};line-height:1">{{ s.n }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ isGrid }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:5px">
+        <sc-for list="{{ cells }}" as="u" hint-placeholder-count="40">
+          <div title="{{ u.title }}" style="aspect-ratio:1.25;border-radius:6px;background:{{ u.bg }};color:{{ u.fg }};display:flex;align-items:flex-end;padding:4px 5px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:clamp(8px,.72vw,10.5px);font-weight:700;overflow:hidden;white-space:nowrap;transition:background .35s;box-shadow:{{ u.ring }}">{{ u.code }}</div>
+        </sc-for>
+      </div>
+      </sc-if>
+    <sc-if value="{{ isSeats }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:7px;padding:14px 10px 6px;border-radius:12px;background:#0a1120;border:1px solid #1c2a44">
+        <div style="align-self:center;width:62%;padding:7px 0;border-radius:0 0 50% 50% / 0 0 100% 100%;background:linear-gradient(180deg,#2f7fd8,#1a4f8f);text-align:center;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;font-weight:700;letter-spacing:.3em;color:#fff;box-shadow:0 10px 30px -8px rgba(47,127,216,.7)">SÂN KHẤU</div>
+        <div style="height:6px"></div>
+        <sc-for list="{{ seatRows }}" as="r" hint-placeholder-count="5">
+          <div style="display:flex;align-items:center;gap:6px;padding-inline:{{ r.inset }}">
+            <span style="flex:none;width:14px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;font-weight:700;color:#8193a8">{{ r.row }}</span>
+            <div style="flex:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px">
+              <sc-for list="{{ r.left }}" as="u" hint-placeholder-count="4">
+                <span title="{{ u.title }}" style="aspect-ratio:1.1;border-radius:9px 9px 4px 4px;background:{{ u.bg }};color:{{ u.fg }};border-bottom:3px solid rgba(0,0,0,.35);display:grid;place-items:center;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:700;transition:background .35s;box-shadow:{{ u.ring }}">{{ u.num }}</span>
+              </sc-for>
+            </div>
+            <span style="flex:none;width:18px"></span>
+            <div style="flex:1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px">
+              <sc-for list="{{ r.right }}" as="u" hint-placeholder-count="4">
+                <span title="{{ u.title }}" style="aspect-ratio:1.1;border-radius:9px 9px 4px 4px;background:{{ u.bg }};color:{{ u.fg }};border-bottom:3px solid rgba(0,0,0,.35);display:grid;place-items:center;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:700;transition:background .35s;box-shadow:{{ u.ring }}">{{ u.num }}</span>
+              </sc-for>
+            </div>
+            <span style="flex:none;width:14px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;font-weight:700;color:#8193a8;text-align:right">{{ r.row }}</span>
+          </div>
+        </sc-for>
+        <div style="display:flex;justify-content:space-between;padding:6px 20px 0;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;color:#6d7892"><span>CỬA A</span><span>LỐI GIỮA</span><span>CỬA B</span></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isPlates }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:12px;background:linear-gradient(90deg,rgba(255,138,107,.16),rgba(255,138,107,.04));border:1px solid rgba(255,138,107,.4)">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap">
+            <span style="font-size:14px;font-weight:700;color:#fff">Cả đợt chỉ có 40 biển · mỗi biển là duy nhất</span>
+            <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13px;font-weight:700;color:#FF8A6B;animation:psBlink 1.4s infinite">CÒN {{ plateLeft }} BIỂN</span>
+          </div>
+          <div style="height:8px;border-radius:8px;background:#1c2a44;overflow:hidden;display:flex"><span style="height:100%;width:{{ plateTakenPct }};background:linear-gradient(90deg,#FF8A6B,#F4C45A);transition:width .4s"></span></div>
+          <span style="font-size:12.5px;color:#c3cfdc">Không phát hành thêm. Biển đẹp ★ luôn bị tranh nhiều nhất.</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;container-type:inline-size">
+          <sc-for list="{{ plates }}" as="p" hint-placeholder-count="40">
+            <div title="{{ p.title }}" style="position:relative;aspect-ratio:3.1;border-radius:5px;background:{{ p.bg }};border:2px solid {{ p.bd }};display:grid;place-items:center;overflow:hidden;opacity:{{ p.op }};transition:all .35s;box-shadow:{{ p.ring }}">
+              <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:clamp(10px,2.5cqi,16px);font-weight:700;letter-spacing:-.02em;color:{{ p.fg }};white-space:nowrap;text-decoration:{{ p.strike }}">{{ p.code }}</span>
+              <span style="position:absolute;top:1px;right:4px;font-size:clamp(8px,1.6cqi,12px);color:#b8860b">{{ p.star }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isCars }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-direction:column;gap:0;padding:10px;border-radius:12px;background:#0b111e;border:1px solid #1c2a44">
+        <sc-for list="{{ carTop }}" as="r" hint-placeholder-count="2">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="flex:none;width:56px;font-size:10.5px;font-weight:600;color:#8193a8;line-height:1.2">{{ r.label }}</span>
+            <div style="flex:1;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));border-left:1.5px solid #3a4a64">
+              <sc-for list="{{ r.cars }}" as="u" hint-placeholder-count="10">
+                <div title="{{ u.title }}" style="position:relative;aspect-ratio:.66;border-right:1.5px solid #3a4a64;padding:8% 16%">
+                  <div style="position:relative;width:100%;height:100%;border-radius:26% 26% 40% 40% / 12% 12% 18% 18%;background:{{ u.bg }};box-shadow:{{ u.ring }},inset 0 -3px 0 rgba(0,0,0,.25),inset 0 2px 0 rgba(255,255,255,.25);transition:background .35s">
+                    <span style="position:absolute;left:14%;right:14%;top:{{ r.wsTop }};height:18%;border-radius:30% 30% 12% 12%;background:rgba(6,10,20,.55)"></span>
+                    <span style="position:absolute;left:18%;right:18%;top:{{ r.rwTop }};height:11%;border-radius:12% 12% 30% 30%;background:rgba(6,10,20,.45)"></span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+        <div style="display:flex;align-items:center;gap:8px;height:30px"><span style="flex:none;width:56px"></span><div style="flex:1;display:flex;align-items:center;justify-content:center;gap:10px;height:100%;background:repeating-linear-gradient(90deg,#3a4a64 0 18px,transparent 18px 32px) center/100% 2px no-repeat"><span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10px;font-weight:700;letter-spacing:.2em;color:#8193a8;background:#0b111e;padding:0 8px">LỐI XE RA ▸</span></div></div>
+        <sc-for list="{{ carBottom }}" as="r" hint-placeholder-count="2">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="flex:none;width:56px;font-size:10.5px;font-weight:600;color:#8193a8;line-height:1.2">{{ r.label }}</span>
+            <div style="flex:1;display:grid;grid-template-columns:repeat(10,minmax(0,1fr));border-left:1.5px solid #3a4a64">
+              <sc-for list="{{ r.cars }}" as="u" hint-placeholder-count="10">
+                <div title="{{ u.title }}" style="position:relative;aspect-ratio:.66;border-right:1.5px solid #3a4a64;padding:8% 16%">
+                  <div style="position:relative;width:100%;height:100%;border-radius:40% 40% 26% 26% / 18% 18% 12% 12%;background:{{ u.bg }};box-shadow:{{ u.ring }},inset 0 -3px 0 rgba(0,0,0,.25),inset 0 2px 0 rgba(255,255,255,.25);transition:background .35s">
+                    <span style="position:absolute;left:18%;right:18%;top:{{ r.rwTop }};height:11%;border-radius:30% 30% 12% 12%;background:rgba(6,10,20,.45)"></span>
+                    <span style="position:absolute;left:14%;right:14%;top:{{ r.wsTop }};height:18%;border-radius:12% 12% 30% 30%;background:rgba(6,10,20,.55)"></span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:#a9b6c5">
+      <sc-for list="{{ legend }}" as="l" hint-placeholder-count="4">
+        <span style="display:flex;align-items:center;gap:6px;white-space:nowrap"><span style="width:10px;height:10px;border-radius:3px;background:{{ l.c }}"></span>{{ l.t }}</span>
+      </sc-for>
+    </div>
+    <div style="border-top:1px solid #1c2a44;padding-top:10px;display:flex;flex-direction:column;gap:2px;min-height:170px">
+      <sc-for list="{{ log }}" as="e" hint-placeholder-count="5">
+        <div style="display:flex;gap:10px;align-items:baseline;padding:5px 0;font-size:13px;line-height:1.4;opacity:{{ e.op }}">
+          <span style="flex:none;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;color:#6d7892">{{ e.t }}</span>
+          <span style="flex:none;width:7px;height:7px;border-radius:50%;background:{{ e.c }};transform:translateY(-1px)"></span>
+          <span style="color:#d3dbe4">{{ e.text }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section id="core" data-screen-label="Cơ chế" style="max-width:1280px;margin:0 auto;padding:clamp(48px,6vw,88px) clamp(20px,4vw,48px);display:flex;flex-direction:column;gap:32px;border-top:1px solid #16223a">
+  <div style="display:flex;flex-direction:column;gap:12px;max-width:720px">
+    <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;font-weight:600;letter-spacing:.14em;color:#9cc4ea">BA LUẬT CỦA LÕI</span>
+    <h2 style="font-size:clamp(30px,3.8vw,48px);line-height:1.08;letter-spacing:-.04em;font-weight:700;color:#fff;text-wrap:balance">Bấm thử từng cơ chế</h2>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px">
+
+    <article style="display:flex;flex-direction:column;gap:18px;padding:24px;border-radius:18px;background:#0c1322;border:1px solid #1c2a44">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;color:#5aa2e8">01</span>
+        <h3 style="font-size:22px;font-weight:700;letter-spacing:-.02em;color:#fff">Đồng bộ tức thời</h3>
+        <p style="font-size:15px;line-height:1.6;color:#a9b6c5">Mọi người bán thấy cùng một trạng thái hàng, cùng một lúc.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:auto">
+        <sc-for list="{{ syncViews }}" as="v" hint-placeholder-count="3">
+          <div style="display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:10px;background:#0a1120;border:1px solid #1c2a44">
+            <span style="font-size:11px;font-weight:600;color:#a9b6c5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ v.name }}</span>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px">
+              <sc-for list="{{ syncCells }}" as="u" hint-placeholder-count="12">
+                <span style="aspect-ratio:1;border-radius:3px;background:{{ u.bg }};transition:background .35s"></span>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;color:#4FD39A">● 3 thiết bị · cùng một trạng thái · độ trễ &lt; 1 giây</span>
+    </article>
+
+    <article style="display:flex;flex-direction:column;gap:18px;padding:24px;border-radius:18px;background:#0c1322;border:1px solid #1c2a44">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;color:#5aa2e8">02</span>
+        <h3 style="font-size:22px;font-weight:700;letter-spacing:-.02em;color:#fff">Khoá khi tranh chấp</h3>
+        <p style="font-size:15px;line-height:1.6;color:#a9b6c5">Nhiều người bấm một món, chỉ người tới trước được.</p>
+      </div>
+      <div style="margin-top:auto;display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:12px;background:#0a1120;border:1px solid #1c2a44">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+          <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:15px;font-weight:700;color:#fff">{{ lockCode }}</span>
+          <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:28px;font-weight:700;color:#F4C45A;line-height:1">{{ lockCount }}</span>
+        </div>
+        <div style="height:6px;border-radius:6px;background:#1c2a44;overflow:hidden"><div style="height:100%;width:{{ lockPct }};background:linear-gradient(90deg,#5aa2e8,#F4C45A);transition:width .08s"></div></div>
+        <span style="font-size:13.5px;line-height:1.5;color:{{ lockColor }};min-height:40px">{{ lockMsg }}</span>
+      </div>
+      <button onClick="{{ runLock }}" style="border:0;cursor:pointer;padding:12px 16px;border-radius:9px;background:#F4C45A;color:#17120a;font-weight:700;font-size:14.5px" style-hover="background:#ffd57a">Cho 200 tài khoản cùng bấm</button>
+    </article>
+
+    <article style="display:flex;flex-direction:column;gap:18px;padding:24px;border-radius:18px;background:#0c1322;border:1px solid #1c2a44">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;color:#5aa2e8">03</span>
+        <h3 style="font-size:22px;font-weight:700;letter-spacing:-.02em;color:#fff">Tiền quyết định trạng thái</h3>
+        <p style="font-size:15px;line-height:1.6;color:#a9b6c5">Chưa xác nhận tiền, món hàng không đổi bước.</p>
+      </div>
+      <div style="margin-top:auto;display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:12px;background:#0a1120;border:1px solid #1c2a44">
+        <div style="display:flex;align-items:center;gap:6px">
+          <sc-for list="{{ moneySteps }}" as="m" hint-placeholder-count="3">
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px;min-width:0">
+              <div style="height:6px;border-radius:6px;background:{{ m.c }};transition:background .3s"></div>
+              <span style="font-size:12px;font-weight:600;color:{{ m.fg }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ m.t }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <span style="font-size:13.5px;line-height:1.5;color:{{ moneyColor }};min-height:40px">{{ moneyMsg }}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button onClick="{{ tryAdvance }}" style="border:1px solid #2a3a50;cursor:pointer;padding:12px 10px;border-radius:9px;background:transparent;color:#fff;font-weight:600;font-size:13.5px" style-hover="border-color:#5aa2e8">Chuyển bước</button>
+        <button onClick="{{ confirmMoney }}" style="border:0;cursor:pointer;padding:12px 10px;border-radius:9px;background:#4FD39A;color:#06231a;font-weight:700;font-size:13.5px" style-hover="background:#7ee6b8">Xác nhận tiền về</button>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="industry" data-screen-label="Đổi ngành" style="border-top:1px solid #16223a;background:linear-gradient(180deg,rgba(12,19,34,.6),rgba(6,10,20,0))">
+  <div style="max-width:1280px;margin:0 auto;padding:clamp(48px,6vw,88px) clamp(20px,4vw,48px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:clamp(28px,4vw,56px);align-items:start">
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;font-weight:600;letter-spacing:.14em;color:#9cc4ea">ĐỔI NGÀNH, GIỮ NGUYÊN LÕI</span>
+      <h2 style="font-size:clamp(30px,3.8vw,48px);line-height:1.08;letter-spacing:-.04em;font-weight:700;color:#fff;text-wrap:balance">Cùng một màn hình, đổi tên theo ngành</h2>
+      <p style="font-size:16px;line-height:1.65;color:#c3cfdc;text-wrap:pretty">Chọn một ngành rồi bấm chạy. Giỏ hàng, luật giữ chỗ và bước tiền là cùng một cơ chế; chỉ tên món hàng, tên người bán và tên trạng thái đổi theo.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ industries }}" as="t" hint-placeholder-count="5">
+          <button onClick="{{ t.pick }}" style="cursor:pointer;padding:10px 16px;border-radius:99px;font-size:14.5px;font-weight:600;border:1px solid {{ t.bd }};background:{{ t.bg }};color:{{ t.fg }};white-space:nowrap">{{ t.name }}</button>
+        </sc-for>
+      </div>
+      <button onClick="{{ runIndustry }}" style="align-self:flex-start;border:0;cursor:pointer;padding:13px 20px;border-radius:9px;background:#fff;color:#060a14;font-weight:700;font-size:15px;white-space:nowrap" style-hover="background:#dbe8f5">Chạy giỏ hàng {{ ind.name }} ▸</button>
+    </div>
+    <div style="border-radius:16px;border:1px solid #1c2a44;background:#0c1322;overflow:hidden">
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);background:#0e1628;border-bottom:1px solid #1c2a44;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;font-weight:600;letter-spacing:.12em;color:#8193a8">
+        <span style="padding:14px 18px">TRONG LÕI</span>
+        <span style="padding:14px 18px;color:#F4C45A">{{ ind.upper }}</span>
+      </div>
+      <sc-for list="{{ mapRows }}" as="r" hint-placeholder-count="6">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);border-bottom:1px solid #16223a;font-size:15px">
+          <span style="padding:14px 18px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13px;color:#8193a8">{{ r.core }}</span>
+          <span style="padding:14px 18px;font-weight:600;color:#fff">{{ r.val }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Showcase theo ngành" style="max-width:1280px;margin:0 auto;padding:clamp(48px,6vw,88px) clamp(20px,4vw,48px);display:flex;flex-direction:column;gap:32px;border-top:1px solid #16223a">
+  <div style="display:flex;flex-direction:column;gap:12px;max-width:720px">
+    <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;font-weight:600;letter-spacing:.14em;color:#9cc4ea">SHOWCASE THEO NGÀNH</span>
+    <h2 style="font-size:clamp(30px,3.8vw,48px);line-height:1.08;letter-spacing:-.04em;font-weight:700;color:#fff;text-wrap:balance">Mỗi ngành một kịch bản trình diễn</h2>
+    <p style="font-size:16px;line-height:1.65;color:#c3cfdc;text-wrap:pretty">Ba ngành đã có showcase bấm được. Các ngành còn lại dựng trên cùng khung khi cần đi gặp khách ngành đó.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px">
+    <sc-for list="{{ showcases }}" as="s" hint-placeholder-count="3">
+      <button onClick="{{ s.open }}" style="text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:16px;padding:0;border-radius:18px;border:1px solid #1c2a44;background:#0c1322;color:#fff;overflow:hidden" style-hover="border-color:#5aa2e8">
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;padding:18px 18px 0">
+          <sc-for list="{{ s.preview }}" as="p" hint-placeholder-count="18">
+            <span style="aspect-ratio:1.3;border-radius:4px;background:{{ p }}"></span>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding:0 20px 22px">
+          <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;color:#5aa2e8">{{ s.n }} · {{ s.item }}</span>
+          <span style="font-size:22px;font-weight:700;letter-spacing:-.02em">{{ s.name }}</span>
+          <span style="font-size:14.5px;line-height:1.55;color:#a9b6c5">{{ s.desc }}</span>
+          <span style="margin-top:6px;font-size:14px;font-weight:700;color:#9cc4ea">Chạy showcase ▸</span>
+        </div>
+      </button>
+    </sc-for>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px;color:#8193a8">
+    <span>Dựng trên cùng khung khi cần:</span>
+    <sc-for list="{{ others }}" as="o" hint-placeholder-count="2">
+      <span style="flex:none;white-space:nowrap;padding:6px 12px;border-radius:99px;border:1px dashed #2a3a50;color:#c3cfdc">{{ o }}</span>
+    </sc-for>
+  </div>
+</section>
+
+<section id="proof" data-screen-label="Kết quả" style="border-top:1px solid #16223a;background:radial-gradient(ellipse 60% 80% at 50% 120%,rgba(244,196,90,.12),rgba(6,10,20,0) 70%)">
+  <div style="max-width:1280px;margin:0 auto;padding:clamp(56px,7vw,104px) clamp(20px,4vw,48px);display:flex;flex-direction:column;gap:36px">
+    <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;font-weight:600;letter-spacing:.14em;color:#9cc4ea">KẾT QUẢ VẬN HÀNH THỰC TẾ</span>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:1px;background:#1c2a44;border:1px solid #1c2a44;border-radius:18px;overflow:hidden">
+      <div style="background:#080e1b;padding:clamp(28px,3vw,40px);display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:clamp(64px,8vw,112px);font-weight:700;letter-spacing:-.06em;line-height:.9;color:#fff">100+</span>
+        <span style="font-size:16px;line-height:1.5;color:#c3cfdc">đại lý bán cùng lúc trên một giỏ hàng</span>
+      </div>
+      <div style="background:#080e1b;padding:clamp(28px,3vw,40px);display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:clamp(64px,8vw,112px);font-weight:700;letter-spacing:-.06em;line-height:.9;color:#F4C45A">200</span>
+        <span style="font-size:16px;line-height:1.5;color:#c3cfdc">tài khoản có lúc cùng bấm giữ một căn</span>
+      </div>
+      <div style="background:#080e1b;padding:clamp(28px,3vw,40px);display:flex;flex-direction:column;gap:12px">
+        <span style="font-size:clamp(64px,8vw,112px);font-weight:700;letter-spacing:-.06em;line-height:.9;color:#fff">3 giờ</span>
+        <span style="font-size:16px;line-height:1.5;color:#c3cfdc">là hết giỏ hàng giai đoạn đầu</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" data-screen-label="Liên hệ" style="max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,48px) clamp(56px,7vw,96px)">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:28px;flex-wrap:wrap;padding:clamp(28px,4vw,48px);border-radius:22px;background:linear-gradient(120deg,#1262a4,#0b3f6b);border:1px solid rgba(156,196,234,.3)">
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:560px">
+      <h2 style="font-size:clamp(28px,3.4vw,42px);line-height:1.1;letter-spacing:-.035em;font-weight:700;color:#fff;text-wrap:balance">Dùng ngay PropSales cho đợt bán tới</h2>
+      <p style="font-size:16px;line-height:1.6;color:#dbe8f5">Gặp trực tiếp người dựng hệ thống để xem giỏ hàng của bạn chạy thế nào.</p>
+      <button onClick="{{ openDemo }}" style="align-self:flex-start;margin-top:8px;border:0;cursor:pointer;padding:13px 22px;border-radius:9px;background:#fff;color:#0b3f6b;font-weight:700;font-size:15px;white-space:nowrap" style-hover="background:#dbe8f5">Đặt lịch demo</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:18px;padding:18px 22px;border-radius:16px;background:rgba(6,10,20,.35);border:1px solid rgba(255,255,255,.18)">
+      <span style="flex:none;width:56px;height:56px;border-radius:50%;background:#fff;color:#0b3f6b;display:grid;place-items:center;font-size:20px;font-weight:800">A</span>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <span style="font-size:18px;font-weight:700;color:#fff">Andy · CEO</span>
+        <a href="tel:0964585584" style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:15px;color:#fff">0964 585 584</a>
+        <a href="mailto:andy@ihouzz.com" style="font-size:14.5px;color:#dbe8f5">andy@ihouzz.com</a>
+        <a href="https://ihouzz.com" style="font-size:14.5px;color:#dbe8f5">ihouzz.com</a>
+      </div>
+    </div>
+  </div>
+  <p style="margin-top:22px;font-size:13px;line-height:1.6;color:#6d7892">Phần đổi ngành là mô phỏng minh hoạ. Mã hàng, tên người bán, thời hạn giữ chỗ là ví dụ.</p>
+</section>
+
+<sc-if value="{{ demoOpen }}" hint-placeholder-val="{{ false }}">
+  <div role="dialog" aria-modal="true" aria-label="Đặt lịch demo" onClick="{{ closeDemoBg }}" style="position:fixed;inset:0;z-index:200;background:rgba(3,6,12,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:grid;place-items:center;padding:20px;overflow-y:auto">
+    <div onClick="{{ stop }}" style="position:relative;width:min(520px,100%);border-radius:20px;background:#0c1322;border:1px solid #24304b;box-shadow:0 40px 80px -30px rgba(0,0,0,.8);padding:clamp(22px,3vw,32px);display:flex;flex-direction:column;gap:18px">
+      <button onClick="{{ closeDemo }}" aria-label="Đóng" style="position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;border:1px solid #2a3a50;background:transparent;color:#c3cfdc;cursor:pointer;font-size:16px" style-hover="border-color:#5aa2e8;color:#fff">✕</button>
+      <sc-if value="{{ demoForm }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:6px;padding-right:40px">
+          <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;font-weight:600;letter-spacing:.14em;color:#9cc4ea">IHOUZZ · SẢN PHẨM SỐ</span>
+          <h2 style="font-size:28px;line-height:1.1;letter-spacing:-.03em;font-weight:700;color:#fff">Đặt lịch demo</h2>
+        </div>
+        <form onSubmit="{{ submitDemo }}" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px">
+          <label style="display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:500;color:#c3cfdc">Ngành của anh/chị
+            <select value="{{ demoInd }}" onChange="{{ setDemoInd }}" style="border:1px solid #2a3a50;border-radius:8px;padding:12px 14px;font-size:15px;background:#0c1424;color:#fff;outline-color:#5aa2e8;width:100%">
+              <sc-for list="{{ indOpts }}" as="o" hint-placeholder-count="6"><option value="{{ o }}">{{ o }}</option></sc-for>
+            </select>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:500;color:#c3cfdc">Sản phẩm quan tâm
+            <select value="{{ demoProduct }}" onChange="{{ setDemoProduct }}" style="border:1px solid #2a3a50;border-radius:8px;padding:12px 14px;font-size:15px;background:#0c1424;color:#fff;outline-color:#5aa2e8;width:100%">
+              <sc-for list="{{ productOpts }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for>
+            </select>
+          </label>
+          <label style="grid-column:1/-1;display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:500;color:#c3cfdc">Họ tên<input required="" name="name" autocomplete="name" style="border:1px solid #2a3a50;border-radius:8px;padding:12px 14px;font-size:15px;background:#0c1424;color:#fff;outline-color:#5aa2e8;width:100%"></label>
+          <label style="display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:500;color:#c3cfdc">Số điện thoại<input required="" type="tel" name="phone" autocomplete="tel" style="border:1px solid #2a3a50;border-radius:8px;padding:12px 14px;font-size:15px;background:#0c1424;color:#fff;outline-color:#5aa2e8;width:100%"></label>
+          <label style="display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:500;color:#c3cfdc">Công ty<input name="company" autocomplete="organization" style="border:1px solid #2a3a50;border-radius:8px;padding:12px 14px;font-size:15px;background:#0c1424;color:#fff;outline-color:#5aa2e8;width:100%"></label>
+          <p style="grid-column:1/-1;font-size:12.5px;line-height:1.55;color:#8193a8">Bản thử: form này chưa gửi dữ liệu đi đâu. Bản thật sẽ đổ lead về OneBox.</p>
+          <button type="submit" style="grid-column:1/-1;border:0;cursor:pointer;padding:14px 20px;border-radius:9px;background:#fff;color:#060a14;font-weight:700;font-size:15px" style-hover="background:#dbe8f5">Đặt lịch demo</button>
+        </form>
+      </sc-if>
+      <sc-if value="{{ demoDone }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:12px;padding:8px 0">
+          <span style="width:48px;height:48px;border-radius:50%;background:#4FD39A;color:#06231a;display:grid;place-items:center;font-size:22px;font-weight:800">✓</span>
+          <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;font-weight:600;letter-spacing:.14em;color:#4FD39A">ĐÃ GHI NHẬN (BẢN THỬ)</span>
+          <h2 style="font-size:28px;line-height:1.1;letter-spacing:-.03em;font-weight:700;color:#fff">Cảm ơn anh/chị</h2>
+          <p style="font-size:15px;line-height:1.6;color:#c3cfdc">Ở bản thật, đội iHouzz sẽ gọi lại để hẹn lịch demo {{ demoProduct }}.</p>
+          <button onClick="{{ closeDemo }}" style="align-self:flex-start;margin-top:6px;border:1px solid #2a3a50;background:transparent;color:#fff;padding:11px 18px;border-radius:9px;cursor:pointer;font-weight:600;font-size:14px" style-hover="border-color:#5aa2e8">Đóng</button>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const IND = {
+  bds: { name: 'Bất động sản', short: 'BĐS', item: 'Căn', seller: 'Đại lý', cart: 'Toà A · Giai đoạn 1', hold: '15 phút', money: 'Tiền cọc', done: 'Ký HĐMB',
+    states: ['Còn hàng', 'Đang giữ', 'Đã cọc', 'Đã bán'], code: i => 'A-' + (16 - Math.floor(i / 8)) + '0' + (i % 8 + 1) },
+  oto: { name: 'Ô tô', short: 'Ô tô', item: 'Xe', seller: 'Showroom', cart: 'Lô xe tháng 10 · 40 xe', hold: '30 phút', money: 'Tiền đặt cọc xe', done: 'Giao xe',
+    states: ['Sẵn bán', 'Đang giữ', 'Đã cọc', 'Đã giao'], code: i => ['SUV7', 'SEDN', 'CROS', 'HATC'][Math.floor(i / 10)] + '-' + String(i % 10 + 1).padStart(2, '0') },
+  ks: { name: 'Khách sạn', short: 'Phòng', item: 'Phòng', seller: 'Kênh OTA', cart: 'Đêm 31/12 · 40 phòng', hold: '10 phút', money: 'Thanh toán trước', done: 'Nhận phòng',
+    states: ['Trống', 'Đang giữ', 'Đã thanh toán', 'Đã nhận'], code: i => 'P' + (8 - Math.floor(i / 8)) + '0' + (i % 8 + 1) },
+  ve: { name: 'Vé sự kiện', short: 'Vé', item: 'Ghế', seller: 'Kênh bán vé', cart: 'Khu VIP · 40 ghế', hold: '5 phút', money: 'Thanh toán vé', done: 'Xuất vé',
+    states: ['Còn vé', 'Đang giữ', 'Đã trả tiền', 'Đã xuất'], code: i => 'ABCDE'[Math.floor(i / 8)] + String(i % 8 + 1).padStart(2, '0') },
+  bs: { name: 'Biển số', short: 'Biển số', item: 'Biển số', seller: 'Điểm đăng ký', cart: 'Đợt biển 30K · 40 số', hold: '10 phút', money: 'Tiền đặt trước', done: 'Cấp biển',
+    states: ['Còn trống', 'Đang giữ', 'Đã nộp tiền', 'Đã cấp'], code: i => '30K-' + (i % 7 === 3 ? ['888.88', '999.99', '686.86', '368.68', '555.55', '789.79'][Math.floor(i / 7) % 6] : String((i * 7919 + 12345) % 90000 + 10000).replace(/(\d{3})(\d{2})/, '$1.$2')) },
+};
+const COL = [['#1F7A55', '#EFFFF6'], ['#F4C45A', '#17120A'], ['#D9542F', '#FFF3EE'], ['#26304a', '#8d97ad']];
+const pad = n => String(n).padStart(2, '0');
+
+class Component extends DCLogic {
+  state = { ind: 'bds', cells: [], log: [], checks: [false, false, false, false, false], online: 128, now: new Date(),
+    lockN: 0, lockPhase: 0, lockWin: 0, money: 0, moneyNote: 0, demo: 0, demoProduct: 'PropSales', demoInd: '' };
+  consoleRef = React.createRef();
+  componentDidMount() { this.seed('bds'); this.t = setInterval(() => this.tick(), 700); }
+  componentWillUnmount() { clearInterval(this.t); clearInterval(this.lt); }
+
+  seed(ind) {
+    const cells = Array.from({ length: 40 }, (_, i) => { const r = Math.random(); return { s: r < .52 ? 0 : r < .68 ? 1 : r < .86 ? 2 : 3, by: 1 + Math.floor(Math.random() * 120), ttl: 4 + Math.floor(Math.random() * 10), fresh: 0 }; });
+    const I = IND[ind];
+    this.setState({ ind, cells, log: [{ t: this.hms(), c: '#5aa2e8', text: 'Mở giỏ hàng ' + I.cart + ' cho ' + I.seller.toLowerCase() }] });
+  }
+  hms() { const d = new Date(); return pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()); }
+  tick() {
+    const I = IND[this.state.ind];
+    const cells = this.state.cells.map(c => ({ ...c, fresh: Math.max(0, c.fresh - 1) }));
+    const log = this.state.log.slice();
+    const add = (c, text) => log.unshift({ t: this.hms(), c, text });
+    cells.forEach((c, i) => { if (c.s === 1) { c.ttl--; if (c.ttl <= 0) { c.s = 0; c.fresh = 2; add('#8193a8', I.item + ' ' + I.code(i) + ' hết hạn giữ, trở lại giỏ'); } } });
+    const pick = s => { const ids = cells.map((c, i) => c.s === s ? i : -1).filter(i => i >= 0); return ids.length ? ids[Math.floor(Math.random() * ids.length)] : -1; };
+    const r = Math.random();
+    if (r < .5) { const i = pick(0); if (i >= 0) { const c = cells[i]; c.s = 1; c.by = 1 + Math.floor(Math.random() * 120); c.ttl = 6 + Math.floor(Math.random() * 8); c.fresh = 3;
+        const n = Math.random() < .35 ? 2 + Math.floor(Math.random() * 60) : 0;
+        add('#F4C45A', n ? n + ' người cùng bấm ' + I.code(i) + ' · ' + I.seller + ' #' + pad(c.by) + ' giữ được' : I.seller + ' #' + pad(c.by) + ' giữ ' + I.item.toLowerCase() + ' ' + I.code(i)); } }
+    else if (r < .78) { const i = pick(1); if (i >= 0) { cells[i].s = 2; cells[i].fresh = 3; add('#FF8A6B', I.money + ' ' + I.code(i) + ' đã về · chuyển "' + I.states[2] + '"'); } }
+    else if (r < .88) { const i = pick(2); if (i >= 0) { cells[i].s = 3; cells[i].fresh = 3; add('#9aa6bd', I.code(i) + ' · ' + I.done.toLowerCase()); } }
+    if (cells.filter(c => c.s === 0).length < 6) cells.forEach(c => { if (c.s === 3 && Math.random() < .5) c.s = 0; });
+    this.setState({ cells, log: log.slice(0, 6), now: new Date(), online: Math.max(104, Math.min(152, this.state.online + Math.round((Math.random() - .5) * 6))) });
+  }
+  pickInd(k) { if (k !== this.state.ind) this.seed(k); this.setState({ lockPhase: 0, lockN: 0 }); }
+  scrollConsole() { const el = this.consoleRef.current; if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 100, behavior: 'smooth' }); }
+  runLock() {
+    clearInterval(this.lt); this.setState({ lockN: 0, lockPhase: 1, lockWin: 1 + Math.floor(Math.random() * 200) });
+    this.lt = setInterval(() => { const n = Math.min(200, this.state.lockN + 9 + Math.floor(Math.random() * 12)); this.setState({ lockN: n }); if (n >= 200) { clearInterval(this.lt); this.setState({ lockPhase: 2 }); } }, 45);
+  }
+
+  renderVals() {
+    const S = this.state, I = IND[S.ind];
+    const counts = [0, 0, 0, 0]; S.cells.forEach(c => counts[c.s]++);
+    const score = S.checks.filter(Boolean).length;
+    const texts = ['Số lượng giới hạn, mỗi món là duy nhất: một căn, một chiếc xe, một phòng, một ghế, một biển số',
+      'Bán qua nhiều người cùng lúc: đại lý, sàn, cộng tác viên, nhiều kênh',
+      'Mọi người bán phải thấy cùng một trạng thái hàng theo thời gian thực',
+      'Nhiều người tranh cùng một món, và không được phép bán trùng',
+      'Hàng chỉ được chuyển bước khi tiền cọc hoặc tiền thanh toán đã về'];
+    const lockCode = I.item + ' ' + I.code(12);
+    const moneyStepNames = [I.states[1], 'Chờ tiền', I.states[2]];
+    const cellVals = S.cells.map((c, i) => ({ code: I.code(i), title: I.item + ' ' + I.code(i) + ' · ' + I.states[c.s], bg: COL[c.s][0], fg: COL[c.s][1], ring: c.fresh ? '0 0 0 2px #FFE9AE, 0 0 18px rgba(244,196,90,.6)' : '0 0 0 0 transparent' }));
+    const kind = S.ind === 've' ? 'seats' : S.ind === 'bs' ? 'plates' : S.ind === 'oto' ? 'cars' : 'grid';
+    const seatRows = kind === 'seats' ? [0, 1, 2, 3, 4].map(r => ({ row: 'ABCDE'[r], inset: (4 - r) * 3 + '%', left: cellVals.slice(r * 8, r * 8 + 4).map((u, k) => ({ ...u, num: k + 1 })), right: cellVals.slice(r * 8 + 4, r * 8 + 8).map((u, k) => ({ ...u, num: k + 5 })) })) : [];
+    const plates = kind === 'plates' ? S.cells.map((c, i) => { const code = I.code(i); const lucky = i % 7 === 3;
+      return { code, star: lucky ? '★' : '', title: 'Biển ' + code + ' · ' + I.states[c.s],
+        bg: c.s === 0 ? '#F3F1EA' : c.s === 1 ? '#FFE9AE' : c.s === 2 ? '#D9542F' : '#2a3348', bd: c.s === 1 ? '#F4C45A' : c.s === 2 ? '#FF8A6B' : c.s === 3 ? '#3a4a64' : '#1b1f2a',
+        fg: c.s === 3 ? '#7d879c' : c.s === 2 ? '#FFF3EE' : '#111722', strike: c.s === 3 ? 'line-through' : 'none', op: c.s === 3 ? '.55' : '1', ring: cellVals[i].ring }; }) : [];
+    const carLabels = ['SUV 7 chỗ', 'Sedan', 'Crossover', 'Hatchback'];
+    const carRow = r => ({ label: carLabels[r], cars: cellVals.slice(r * 10, r * 10 + 10), wsTop: r < 2 ? '58%' : '24%', rwTop: r < 2 ? '14%' : '76%' });
+    return {
+      showHeader: !this.props.embedded,
+      demoOpen: this.state.demo > 0, demoForm: this.state.demo === 1, demoDone: this.state.demo === 2,
+      openDemo: e => { if (e && e.preventDefault) e.preventDefault(); this.setState(s => ({ demo: 1, demoInd: s.demoInd || IND[s.ind].name })); },
+      closeDemo: () => this.setState({ demo: 0 }), closeDemoBg: e => { if (e.target === e.currentTarget) this.setState({ demo: 0 }); }, stop: () => {},
+      demoProduct: this.state.demoProduct, demoInd: this.state.demoInd || IND[S.ind].name,
+      productOpts: ['PropSales', 'Chăm sóc khách hàng', 'Vận hành tài sản', 'Tích hợp thiết bị'],
+      indOpts: Object.values(IND).map(x => x.name).concat('Ngành khác'),
+      setDemoProduct: e => this.setState({ demoProduct: e.target.value }), setDemoInd: e => this.setState({ demoInd: e.target.value }),
+      submitDemo: e => { e.preventDefault(); this.setState({ demo: 2 }); },
+      isGrid: kind === 'grid', isSeats: kind === 'seats', isPlates: kind === 'plates', isCars: kind === 'cars',
+      seatRows, plates, plateLeft: counts[0], plateTakenPct: ((40 - counts[0]) / 40 * 100) + '%',
+      carTop: kind === 'cars' ? [carRow(0), carRow(1)] : [], carBottom: kind === 'cars' ? [carRow(2), carRow(3)] : [],
+      checks: texts.map((text, i) => { const on = S.checks[i]; return { text, pressed: on ? 'true' : 'false', mark: on ? '✓' : '', bd: on ? 'rgba(90,162,232,.6)' : '#1c2a44', bg: on ? 'rgba(47,127,216,.14)' : 'rgba(12,19,34,.6)', box: on ? '#5aa2e8' : '#3a4a64', fill: on ? '#5aa2e8' : 'transparent',
+        toggle: () => this.setState(s => { const c = s.checks.slice(); c[i] = !c[i]; return { checks: c }; }) }; }),
+      score, verdict: score >= 3 ? 'PropSales làm cho đúng bài toán này.' : score > 0 ? 'Bạn đang gặp một phần bài toán.' : 'Dùng ngay PropSales.',
+      consoleRef: this.consoleRef, ind: { ...I, sellerLower: I.seller.toLowerCase(), upper: I.name.toUpperCase() },
+      online: S.online, clock: pad(S.now.getHours()) + ':' + pad(S.now.getMinutes()) + ':' + pad(S.now.getSeconds()),
+      industries: Object.keys(IND).map(k => { const on = k === S.ind; return { name: IND[k].name, short: IND[k].short, bg: on ? '#2f7fd8' : 'transparent', fg: on ? '#fff' : '#a9b6c5', bd: on ? '#5aa2e8' : '#2a3a50', pick: () => this.pickInd(k) }; }),
+      stats: I.states.map((label, i) => ({ label, n: counts[i], color: ['#4FD39A', '#F4C45A', '#FF8A6B', '#8d97ad'][i] })),
+      cells: cellVals,
+      legend: I.states.map((t, i) => ({ t, c: COL[i][0] })),
+      log: S.log.map((e, i) => ({ ...e, op: String(1 - i * .13) })),
+      syncViews: [{ name: I.seller + ' #07' }, { name: 'Sàn giao dịch' }, { name: 'Cộng tác viên' }],
+      syncCells: S.cells.slice(0, 12).map(c => ({ bg: COL[c.s][0] })),
+      lockCode, lockCount: S.lockN + ' / 200', lockPct: (S.lockN / 2) + '%',
+      lockMsg: S.lockPhase === 0 ? 'Bấm nút để 200 tài khoản cùng giữ ' + lockCode + ' trong cùng một giây.' : S.lockPhase === 1 ? 'Đang nhận yêu cầu giữ chỗ…' : I.seller + ' #' + pad(S.lockWin) + ' tới trước và giữ được. 199 yêu cầu còn lại bị từ chối ngay. 0 bán trùng.',
+      lockColor: S.lockPhase === 2 ? '#4FD39A' : '#a9b6c5', runLock: () => this.runLock(),
+      moneySteps: moneyStepNames.map((t, i) => ({ t, c: i <= S.money ? ['#F4C45A', '#5aa2e8', '#FF8A6B'][i] : '#1c2a44', fg: i <= S.money ? '#fff' : '#6d7892' })),
+      moneyMsg: S.moneyNote === 1 ? 'Chặn: chưa có xác nhận tiền, ' + lockCode + ' vẫn ở "' + moneyStepNames[S.money] + '".' : S.money === 0 ? lockCode + ' đang giữ chỗ ' + I.hold + '. Thử chuyển bước khi chưa có tiền.' : S.money === 1 ? 'Kế toán đã xác nhận ' + I.money.toLowerCase() + '. Giờ có thể chuyển bước.' : lockCode + ' đã sang "' + I.states[2] + '". Mọi người bán thấy ngay.',
+      moneyColor: S.moneyNote === 1 ? '#FF8A6B' : S.money === 2 ? '#4FD39A' : '#a9b6c5',
+      tryAdvance: () => this.setState(s => s.money === 1 ? { money: 2, moneyNote: 0 } : s.money === 2 ? { money: 0, moneyNote: 0 } : { moneyNote: 1 }),
+      confirmMoney: () => this.setState(s => ({ money: s.money === 0 ? 1 : s.money, moneyNote: 0 })),
+      mapRows: [['Món hàng', I.item], ['Người bán', I.seller], ['Giỏ hàng', I.cart], ['Giữ chỗ', 'Giữ ' + I.hold + ', hết hạn tự trả về'], ['Bước tiền', I.money + ' về mới đổi trạng thái'], ['Trạng thái', I.states.join(' → ')]].map(([core, val]) => ({ core, val })),
+      runIndustry: () => this.scrollConsole(),
+      showcases: [['bds', '01', 'Mở bán dự án với 100+ đại lý, sa bàn trực tiếp tại sàn.'], ['oto', '02', 'Chia lô xe cho các showroom, giữ xe theo số khung.'], ['ve', '03', 'Mở bán khu ghế VIP qua nhiều kênh, không bán trùng ghế.']].map(([k, n, desc]) => ({ n, name: IND[k].name, item: IND[k].item, desc,
+        preview: Array.from({ length: 18 }, (_, i) => COL[[0, 0, 1, 0, 2, 3, 0, 1, 0, 0, 2, 0, 3, 0, 0, 1, 2, 0][(i + n.charCodeAt(1)) % 18]][0]),
+        open: () => { this.pickInd(k); this.scrollConsole(); } })),
+      others: ['Khách sạn', 'Biển số'],
+    };
+  }
+}
+</script>
+</body>
+</html>

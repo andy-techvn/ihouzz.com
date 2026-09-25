@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div ref="{{ topRef }}" style="max-width:1200px;margin:0 auto;padding:clamp(28px,4vw,48px) clamp(20px,4vw,48px) clamp(56px,7vw,96px);display:flex;flex-direction:column;gap:28px;font-family:'Be Vietnam Pro',system-ui,sans-serif;color:#0f1c2e;scroll-margin-top:80px">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid #e3e7ec">
+    <nav aria-label="Nhóm sản phẩm" style="display:flex;gap:4px;overflow-x:auto;scrollbar-width:none">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+        <button onClick="{{ t.pick }}" aria-current="{{ t.cur }}" style="flex:none;border:0;background:none;cursor:pointer;padding:14px 12px 12px;font-family:inherit;font-size:15px;font-weight:600;white-space:nowrap;color:{{ t.fg }};box-shadow:inset 0 -3px 0 {{ t.bar }}" style-hover="color:#1262a4">{{ t.label }}</button>
+      </sc-for>
+    </nav>
+    <label style="display:flex;align-items:center;gap:8px;padding:0 14px;height:42px;margin-bottom:8px;border:1px solid #c9d1da;border-radius:99px;background:#fff;min-width:min(100%,260px)">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#6b7785" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input type="search" value="{{ q }}" onChange="{{ setQ }}" placeholder="Tìm sản phẩm, ngành…" aria-label="Tìm sản phẩm" style="flex:1;min-width:0;border:0;outline:0;font-family:inherit;font-size:15px;background:transparent;color:#0f1c2e">
+    </label>
+  </div>
+
+  <sc-if value="{{ showChips }}" hint-placeholder-val="{{ true }}">
+    <div role="group" aria-label="Lọc theo ngành" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6b7785;margin-right:4px">Ngành</span>
+      <sc-for list="{{ chips }}" as="c" hint-placeholder-count="7">
+        <button onClick="{{ c.pick }}" aria-pressed="{{ c.on }}" style="display:flex;align-items:center;gap:7px;cursor:pointer;padding:8px 14px;border-radius:99px;font-family:inherit;font-size:14px;font-weight:600;white-space:nowrap;border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }}" style-hover="border-color:#1262a4">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ c.icon }}"></path></svg>{{ c.label }}
+        </button>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <sc-if value="{{ showShows }}" hint-placeholder-val="{{ true }}">
+      <section style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <h2 style="margin:0;font-size:24px;letter-spacing:-.02em;font-weight:700">Xem chạy thử{{ indSuffix }}</h2>
+          <p style="margin:0;font-size:15px;color:#4a5868">Mở từng bản chạy thử để thấy nền tảng xử lý đúng ngành của anh/chị.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:14px">
+          <sc-for list="{{ shows }}" as="s" hint-placeholder-count="5">
+            <button onClick="{{ s.open }}" style="text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:8px;padding:0 0 16px;border:1px solid #dde2e7;border-radius:14px;background:#fff;overflow:hidden;font-family:inherit;color:#0f1c2e" style-hover="border-color:#1262a4">
+              <span style="position:relative;height:96px;background:{{ s.c }};display:flex;align-items:flex-end;padding:12px 14px;color:#fff;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">{{ s.tag }}<span style="position:absolute;top:10px;right:10px;padding:4px 9px;border-radius:99px;background:rgba(255,255,255,.2);font-size:11px;letter-spacing:.04em">Chạy thử</span></span>
+              <b style="padding:0 14px;font-size:15.5px;line-height:1.35">{{ s.t }}</b>
+              <span style="padding:0 14px;font-size:13.5px;line-height:1.5;color:#4a5868">{{ s.d }}</span>
+              <span style="padding:0 14px;margin-top:auto;font-size:13.5px;font-weight:700;color:#1262a4">{{ s.cta }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <section style="display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <h2 style="margin:0;font-size:clamp(26px,3vw,34px);line-height:1.15;letter-spacing:-.03em;font-weight:700;text-wrap:balance">{{ group.head }}</h2>
+        <p style="margin:0;font-size:16px;line-height:1.6;color:#4a5868;max-width:720px;text-wrap:pretty">{{ group.sub }}</p>
+      </div>
+      <sc-if value="{{ hasList }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px">
+          <sc-for list="{{ featured }}" as="p" hint-placeholder-count="3">
+            <button onClick="{{ p.open }}" style="text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:16px;padding:0 0 20px;border:1px solid #dde2e7;border-radius:16px;background:#fff;overflow:hidden;font-family:inherit;color:#0f1c2e" style-hover="border-color:#9fb3c8">
+              <div style="position:relative;aspect-ratio:16/9;background:{{ p.bg }};overflow:hidden">
+                <sc-if value="{{ p.isGrid }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;inset:0;padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+                    <div style="display:flex;justify-content:space-between;gap:10px;font-size:12px;font-weight:600;color:#dbe8f5;white-space:nowrap"><span style="overflow:hidden;text-overflow:ellipsis">{{ gridTitle }}</span><span style="display:flex;align-items:center;gap:6px;color:#fff"><span style="width:7px;height:7px;border-radius:50%;background:#4FD39A"></span>Realtime</span></div>
+                    <div style="flex:1;display:grid;grid-template-columns:repeat(10,1fr);gap:3px">
+                      <sc-for list="{{ gridCells }}" as="g" hint-placeholder-count="40"><span style="border-radius:3px;background:{{ g }};transition:background .4s"></span></sc-for>
+                    </div>
+                    <div style="display:flex;gap:12px;font-size:11px;color:#dbe8f5;white-space:nowrap"><span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:2px;background:#E8EEF5"></span>Còn</span><span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:2px;background:#F2B84B"></span>{{ tHold }}</span><span style="display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;border-radius:2px;background:#E8703A"></span>{{ tPaid }}</span></div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ p.isInbox }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;inset:0;padding:14px 16px;display:flex;flex-direction:column;gap:7px">
+                    <sc-for list="{{ inbox }}" as="m" hint-placeholder-count="4">
+                      <div style="display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:9px;background:rgba(255,255,255,.95)"><span style="flex:none;width:22px;height:22px;border-radius:6px;background:{{ m.c }};color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700">{{ m.ch }}</span><span style="flex:1;display:flex;flex-direction:column;gap:4px"><span style="height:6px;width:55%;border-radius:4px;background:#c9d1da"></span><span style="height:5px;width:80%;border-radius:4px;background:#e3e7ec"></span></span><span style="font-size:10px;font-weight:700;color:#6B3590;white-space:nowrap">{{ m.st }}</span></div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ p.isAuction }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;inset:0;padding:14px 16px;display:flex;flex-direction:column;gap:8px;color:#fff">
+                    <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:#F1D6D6"><span>Lô 07 · Phiên trực tuyến</span><span style="font-variant-numeric:tabular-nums;color:#fff">● {{ aClock }}</span></div>
+                    <span style="font-size:11px;color:#F1D6D6;margin-top:auto">Giá dẫn</span>
+                    <span style="font-size:clamp(26px,2.6vw,34px);font-weight:700;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums">{{ aPrice }}</span>
+                    <span style="height:5px;border-radius:5px;background:rgba(255,255,255,.2);overflow:hidden"><span style="display:block;height:100%;width:{{ aBar }};background:#F2B84B;transition:width 1s linear"></span></span>
+                    <div style="display:flex;gap:8px;font-size:11px;color:#F1D6D6;white-space:nowrap;overflow:hidden"><sc-for list="{{ aBids }}" as="b" hint-placeholder-count="2"><span>{{ b }}</span></sc-for></div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ p.isCards }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;inset:0;padding:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-items:center">
+                    <sc-for list="{{ kcards }}" as="k" hint-placeholder-count="3">
+                      <div style="border-radius:10px;background:#fff;padding:8px;display:flex;flex-direction:column;gap:6px"><span style="aspect-ratio:4/3;border-radius:6px;background:#dfe6ee"></span><span style="height:6px;width:70%;border-radius:4px;background:#c9d1da"></span><span style="font-size:10.5px;font-weight:700;color:#0F6E5C">{{ k }}</span></div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ p.isPlain }}" hint-placeholder-val="{{ true }}">
+                  <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;padding:16px 18px;color:#fff">
+                    <span style="font-size:clamp(44px,5vw,64px);font-weight:800;letter-spacing:-.05em;line-height:.9;opacity:.95">{{ p.mark }}</span>
+                    <span style="font-size:11.5px;font-weight:700;letter-spacing:.12em">{{ p.cap }}</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ p.badge }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:12px;right:12px;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.92);color:#0f1c2e;font-size:11.5px;font-weight:700">{{ p.badge }}</span></sc-if>
+              </div>
+              <div style="display:flex;gap:14px;padding:0 20px">
+                <span style="flex:none;width:48px;height:48px;border-radius:13px;background:{{ p.color }};color:#fff;display:grid;place-items:center;font-size:15px;font-weight:800;letter-spacing:-.02em">{{ p.mark }}</span>
+                <span style="display:flex;flex-direction:column;gap:4px;min-width:0">
+                  <span style="font-size:17px;font-weight:700;letter-spacing:-.01em">{{ p.name }}</span>
+                  <span style="font-size:14px;line-height:1.5;color:#4a5868">{{ p.tag }}</span>
+                  <span style="font-size:12.5px;color:#6b7785">{{ p.meta }}</span>
+                </span>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noList }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:22px;border-radius:14px;border:1px dashed #c9d1da;color:#4a5868;font-size:15px">Nhóm này chưa có sản phẩm cho ngành {{ indLower }}.<button onClick="{{ allInd }}" style="border:1px solid #c9d1da;background:#fff;color:#0f1c2e;padding:9px 16px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px">Xem mọi ngành</button></div>
+      </sc-if>
+    </section>
+
+    <sc-if value="{{ hasList }}" hint-placeholder-val="{{ true }}">
+      <section style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <h2 style="margin:0;font-size:20px;letter-spacing:-.02em;font-weight:700">Tất cả trong nhóm {{ group.label }}{{ indSuffix }}</h2>
+          <span style="font-size:14px;color:#6b7785">{{ listCount }} sản phẩm</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:12px">
+          <sc-for list="{{ list }}" as="p" hint-placeholder-count="4">
+            <button onClick="{{ p.open }}" style="display:flex;align-items:center;gap:14px;text-align:left;cursor:pointer;padding:12px;border:1px solid #e3e7ec;border-radius:14px;background:#fff;font-family:inherit;color:#0f1c2e" style-hover="border-color:#9fb3c8;background:#f8fafc">
+              <span style="position:relative;flex:none;width:56px;height:56px;border-radius:15px;background:{{ p.color }};color:#fff;display:grid;place-items:center;font-size:16px;font-weight:800;letter-spacing:-.02em">{{ p.mark }}</span>
+              <span style="display:flex;flex-direction:column;gap:3px;min-width:0"><span style="font-size:15px;font-weight:600">{{ p.name }}</span><span style="font-size:13px;line-height:1.4;color:#6b7785">{{ p.short }}</span><sc-if value="{{ p.pill }}" hint-placeholder-val="{{ false }}"><span style="align-self:flex-start;margin-top:3px;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700;background:{{ p.pillBg }};color:{{ p.pillFg }}">{{ p.pill }}</span></sc-if></span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{ hiddenBds }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:14px 18px;border-radius:12px;background:#f2f7fc;border:1px solid #cfe0f1;font-size:14.5px;color:#0b3f6b"><span>Thêm {{ hiddenBds }} sản phẩm dành riêng cho bất động sản trong nhóm này.</span><button onClick="{{ bdsInd }}" style="border:1px solid #1262a4;background:#fff;color:#1262a4;padding:8px 14px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px;white-space:nowrap">Xem sản phẩm cho BĐS</button></div>
+        </sc-if>
+      </section>
+    </sc-if>
+  </sc-if>
+
+  <sc-if value="{{ isSearch }}" hint-placeholder-val="{{ false }}">
+    <section style="display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <h2 style="margin:0;font-size:24px;letter-spacing:-.02em;font-weight:700">Kết quả cho “{{ q }}”</h2>
+        <span style="font-size:14px;color:#6b7785">{{ resCount }} sản phẩm</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:12px">
+        <sc-for list="{{ results }}" as="p" hint-placeholder-count="4">
+          <button onClick="{{ p.open }}" style="display:flex;align-items:center;gap:14px;text-align:left;cursor:pointer;padding:12px;border:1px solid #e3e7ec;border-radius:14px;background:#fff;font-family:inherit;color:#0f1c2e" style-hover="border-color:#9fb3c8;background:#f8fafc">
+            <span style="flex:none;width:56px;height:56px;border-radius:15px;background:{{ p.color }};color:#fff;display:grid;place-items:center;font-size:16px;font-weight:800">{{ p.mark }}</span>
+            <span style="display:flex;flex-direction:column;gap:3px;min-width:0"><span style="font-size:15px;font-weight:600">{{ p.name }}</span><span style="font-size:13px;line-height:1.4;color:#6b7785">{{ p.short }}</span></span>
+          </button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ noRes }}" hint-placeholder-val="{{ false }}"><div style="padding:22px;border-radius:14px;border:1px dashed #c9d1da;color:#4a5868;font-size:15px">Không tìm thấy sản phẩm nào khớp. Thử “vé”, “đấu giá”, “lead” hoặc “robot”.</div></sc-if>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+    <button onClick="{{ back }}" style="align-self:flex-start;display:flex;align-items:center;gap:6px;border:0;background:none;padding:0;cursor:pointer;font-family:inherit;color:#1262a4;font-weight:600;font-size:14px" style-hover="color:#0b3f6b">← Quay lại {{ d.groupLabel }}</button>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(28px,4vw,56px);align-items:start">
+      <div style="grid-column:span 2;min-width:0;display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;gap:18px;align-items:flex-start">
+          <span style="flex:none;width:84px;height:84px;border-radius:22px;background:{{ d.color }};color:#fff;display:grid;place-items:center;font-size:24px;font-weight:800;letter-spacing:-.03em">{{ d.mark }}</span>
+          <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+            <h2 style="margin:0;font-size:clamp(28px,3.4vw,40px);line-height:1.1;letter-spacing:-.035em;font-weight:700">{{ d.name }}</h2>
+            <span style="font-size:14.5px;color:#4a5868">{{ d.byline }}</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+              <sc-for list="{{ d.inds }}" as="x" hint-placeholder-count="1"><span style="padding:3px 10px;border-radius:99px;background:#e6eff8;color:#0b3f6b;font-size:12.5px;font-weight:600">{{ x }}</span></sc-for>
+              <sc-if value="{{ d.pill }}" hint-placeholder-val="{{ false }}"><span style="padding:3px 10px;border-radius:99px;font-size:12.5px;font-weight:700;background:{{ d.pillBg }};color:{{ d.pillFg }}">{{ d.pill }}</span></sc-if>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));border:1px solid #e3e7ec;border-radius:14px;overflow:hidden;background:#fff">
+          <sc-for list="{{ d.facts }}" as="f" hint-placeholder-count="3">
+            <div style="padding:16px 18px;display:flex;flex-direction:column;gap:4px;box-shadow:1px 0 0 #e3e7ec"><b style="font-size:15px">{{ f.a }}</b><span style="font-size:13.5px;color:#6b7785">{{ f.b }}</span></div>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button onClick="{{ d.primary }}" style="border:0;background:#1262a4;color:#fff;padding:13px 22px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;font-size:15px;white-space:nowrap" style-hover="background:#0b3f6b">{{ d.primaryLabel }}</button>
+          <sc-if value="{{ d.hasSecondary }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ d.secondary }}" style="border:1px solid #c9d1da;background:#fff;color:#0f1c2e;padding:13px 20px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;font-size:15px;white-space:nowrap" style-hover="border-color:#1262a4;color:#1262a4">{{ d.secondaryLabel }}</button>
+          </sc-if>
+        </div>
+        <div style="position:relative;aspect-ratio:21/9;border-radius:16px;background:{{ d.bg }};overflow:hidden">
+          <sc-if value="{{ d.isGrid }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;padding:clamp(14px,2vw,24px);display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:600;color:#dbe8f5;white-space:nowrap"><span>{{ gridTitle }}</span><span style="display:flex;align-items:center;gap:6px;color:#fff"><span style="width:8px;height:8px;border-radius:50%;background:#4FD39A"></span>Realtime</span></div>
+              <div style="flex:1;display:grid;grid-template-columns:repeat(10,1fr);gap:4px"><sc-for list="{{ gridCells }}" as="g" hint-placeholder-count="40"><span style="border-radius:4px;background:{{ g }};transition:background .4s"></span></sc-for></div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ d.isInbox }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;padding:clamp(14px,2vw,24px);display:flex;flex-direction:column;justify-content:center;gap:8px;max-width:520px;margin:0 auto">
+              <sc-for list="{{ inbox }}" as="m" hint-placeholder-count="4">
+                <div style="display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:10px;background:rgba(255,255,255,.95)"><span style="flex:none;width:26px;height:26px;border-radius:7px;background:{{ m.c }};color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700">{{ m.ch }}</span><span style="flex:1;display:flex;flex-direction:column;gap:5px"><span style="height:7px;width:50%;border-radius:4px;background:#c9d1da"></span><span style="height:6px;width:78%;border-radius:4px;background:#e3e7ec"></span></span><span style="font-size:11px;font-weight:700;color:#6B3590">{{ m.st }}</span></div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ d.isAuction }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;padding:clamp(16px,2.4vw,28px);display:flex;flex-direction:column;justify-content:flex-end;gap:10px;color:#fff">
+              <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:#F1D6D6"><span>Lô 07 · Phiên trực tuyến</span><span style="color:#fff;font-variant-numeric:tabular-nums">● {{ aClock }}</span></div>
+              <span style="font-size:clamp(34px,4.4vw,56px);font-weight:700;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums">{{ aPrice }}</span>
+              <span style="height:6px;border-radius:6px;background:rgba(255,255,255,.2);overflow:hidden"><span style="display:block;height:100%;width:{{ aBar }};background:#F2B84B;transition:width 1s linear"></span></span>
+            </div>
+          </sc-if>
+          <sc-if value="{{ d.isCards }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;padding:clamp(16px,3vw,36px);display:grid;grid-template-columns:repeat(3,minmax(0,160px));justify-content:center;gap:14px;align-items:center">
+              <sc-for list="{{ kcards }}" as="k" hint-placeholder-count="3"><div style="border-radius:12px;background:#fff;padding:10px;display:flex;flex-direction:column;gap:7px"><span style="aspect-ratio:4/3;border-radius:7px;background:#dfe6ee"></span><span style="height:7px;width:70%;border-radius:4px;background:#c9d1da"></span><span style="font-size:12px;font-weight:700;color:#0F6E5C">{{ k }}</span></div></sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ d.isPlain }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:clamp(18px,3vw,32px);color:#fff">
+              <span style="font-size:clamp(64px,9vw,120px);font-weight:800;letter-spacing:-.06em;line-height:.85">{{ d.mark }}</span>
+              <span style="font-size:13px;font-weight:700;letter-spacing:.14em">{{ d.cap }}</span>
+            </div>
+          </sc-if>
+        </div>
+        <section style="display:flex;flex-direction:column;gap:10px">
+          <h3 style="margin:0;font-size:22px;letter-spacing:-.02em;font-weight:700">Giới thiệu</h3>
+          <p style="margin:0;font-size:16px;line-height:1.7;color:#4a5868;text-wrap:pretty">{{ d.about }}</p>
+        </section>
+        <section style="display:flex;flex-direction:column;gap:12px">
+          <h3 style="margin:0;font-size:22px;letter-spacing:-.02em;font-weight:700">{{ d.featTitle }}</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px 24px">
+            <sc-for list="{{ d.feats }}" as="f" hint-placeholder-count="4">
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.5"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:#e6eff8;color:#1262a4;display:grid;place-items:center;font-size:12px;font-weight:800">✓</span><span>{{ f }}</span></div>
+            </sc-for>
+          </div>
+        </section>
+        <sc-if value="{{ d.terms }}" hint-placeholder-val="{{ false }}">
+          <section style="display:flex;flex-direction:column;gap:12px">
+            <h3 style="margin:0;font-size:22px;letter-spacing:-.02em;font-weight:700">Cùng một nền tảng, gọi theo ngành của anh/chị</h3>
+            <div style="overflow-x:auto;border:1px solid #e3e7ec;border-radius:14px">
+              <div style="min-width:680px">
+                <div style="display:grid;grid-template-columns:1.2fr .8fr 1.1fr 1fr 1fr 1.4fr;background:#f4f6f8;font-size:12.5px;font-weight:700;letter-spacing:.04em;color:#4a5868"><span style="padding:12px 14px">Ngành</span><span style="padding:12px 14px">Món hàng</span><span style="padding:12px 14px">Người bán</span><span style="padding:12px 14px">Khi đang giữ</span><span style="padding:12px 14px">Chốt bằng</span><span style="padding:12px 14px">Ví dụ</span></div>
+                <sc-for list="{{ termRows }}" as="r" hint-placeholder-count="6">
+                  <div style="display:grid;grid-template-columns:1.2fr .8fr 1.1fr 1fr 1fr 1.4fr;border-top:1px solid #eef1f4;font-size:14px;background:{{ r.bg }};font-weight:{{ r.fw }}"><span style="padding:12px 14px">{{ r.label }}</span><span style="padding:12px 14px">{{ r.unit }}</span><span style="padding:12px 14px">{{ r.seller }}</span><span style="padding:12px 14px">{{ r.hold }}</span><span style="padding:12px 14px">{{ r.money }}</span><span style="padding:12px 14px;color:#4a5868">{{ r.ex }}</span></div>
+                </sc-for>
+              </div>
+            </div>
+          </section>
+        </sc-if>
+        <sc-if value="{{ d.calc }}" hint-placeholder-val="{{ false }}">
+          <section ref="{{ calcRef }}" style="display:flex;flex-direction:column;gap:16px;padding:clamp(20px,3vw,28px);border-radius:16px;background:#f4f6f8;scroll-margin-top:90px">
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><h3 style="margin:0;font-size:22px;letter-spacing:-.02em;font-weight:700">Vay mua nhà phố</h3><span style="padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;background:#efe9ff;color:#5b3fc4">Chạy thử được</span></div>
+            <p style="margin:0;font-size:14px;color:#6b7785">Số điền sẵn là ví dụ. Trả góp đều hằng tháng theo lãi suất cố định.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:12px">
+              <sc-for list="{{ calcFields }}" as="c" hint-placeholder-count="4">
+                <label style="display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:500">{{ c.label }}<input type="number" value="{{ c.v }}" onChange="{{ c.set }}" min="0" step="{{ c.step }}" style="border:1px solid #c9d1da;border-radius:6px;padding:11px 12px;font-size:15px;font-family:inherit;background:#fff;color:#0f1c2e;outline-color:#1262a4;width:100%;box-sizing:border-box"></label>
+              </sc-for>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:12px">
+              <sc-for list="{{ calcOut }}" as="o" hint-placeholder-count="4">
+                <div style="padding:14px 16px;border-radius:12px;background:#fff;display:flex;flex-direction:column;gap:4px"><span style="font-size:13px;color:#6b7785">{{ o.label }}</span><b style="font-size:20px;letter-spacing:-.02em;color:{{ o.c }}">{{ o.v }}</b></div>
+              </sc-for>
+            </div>
+          </section>
+        </sc-if>
+      </div>
+      <aside style="position:sticky;top:90px;display:flex;flex-direction:column;gap:10px">
+        <h3 style="margin:0 0 4px;font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6b7785">Dùng cùng với</h3>
+        <sc-for list="{{ d.rel }}" as="r" hint-placeholder-count="3">
+          <button onClick="{{ r.open }}" style="display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;padding:10px;border:1px solid #e3e7ec;border-radius:12px;background:#fff;font-family:inherit;color:#0f1c2e" style-hover="border-color:#9fb3c8">
+            <span style="flex:none;width:42px;height:42px;border-radius:11px;background:{{ r.color }};color:#fff;display:grid;place-items:center;font-size:13px;font-weight:800">{{ r.mark }}</span>
+            <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><b style="font-size:14.5px">{{ r.name }}</b><span style="font-size:13px;color:#6b7785">{{ r.short }}</span></span>
+          </button>
+        </sc-for>
+        <div style="margin-top:8px;padding:20px;border-radius:14px;background:#f2f7fc;border:1px solid #cfe0f1;display:flex;flex-direction:column;gap:10px">
+          <b style="font-size:16px">Cần tư vấn?</b>
+          <span style="font-size:14px;line-height:1.55;color:#4a5868">Đội iHouzz demo trực tiếp trên dữ liệu của doanh nghiệp anh/chị.</span>
+          <button onClick="{{ d.demo }}" style="align-self:flex-start;border:0;background:#1262a4;color:#fff;padding:10px 16px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;font-size:14px" style-hover="background:#0b3f6b">Đặt lịch demo</button>
+        </div>
+      </aside>
+    </div>
+  </sc-if>
+
+  <p style="margin:0;font-size:13px;color:#6b7785">Bản thử giao diện · mã hàng, số tiền là ví dụ.</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const INDS = {
+  bds: { label: 'BĐS dự án', form: 'Bất động sản', unit: 'căn', seller: 'sàn', grid: 'Block A · Tầng 18–22', hold: 'Đang giữ', paid: 'Đã cọc', money: 'Cọc', ex: 'Căn A-11-05' },
+  oto: { label: 'Ô tô', form: 'Ô tô', unit: 'xe', seller: 'đại lý', grid: 'Lô phân bổ tháng 10 · theo số khung', hold: 'Đang giữ', paid: 'Đã cọc', money: 'Cọc', ex: 'Xe số khung …0417' },
+  hotel: { label: 'Khách sạn & tour', form: 'Khách sạn', unit: 'phòng', seller: 'đại lý lữ hành', grid: 'Quỹ phòng dịp Tết', hold: 'Đang giữ', paid: 'Đã thanh toán', money: 'Thanh toán', ex: 'Phòng 1205 · đêm 29 Tết' },
+  ve: { label: 'Vé sự kiện', form: 'Vé sự kiện', unit: 'ghế', seller: 'kênh bán vé', grid: 'Khu A · Hàng 1–4', hold: 'Đang giữ', paid: 'Đã thanh toán', money: 'Thanh toán', ex: 'Ghế VIP A-02-07' },
+  daugia: { label: 'Đấu giá', form: 'Đấu giá', unit: 'lô', seller: 'người tham gia', grid: 'Phiên đấu giá · 40 lô', hold: 'Đang trả giá', paid: 'Đã trúng', money: 'Tiền đặt trước', ex: 'Lô 07' },
+  limited: { label: 'Hàng giới hạn', form: 'Hàng giới hạn', unit: 'món', seller: 'CTV', grid: 'Đợt phát hành · 40 món', hold: 'Đang giữ', paid: 'Đã thanh toán', money: 'Thanh toán', ex: 'Món số 018/200' }
+};
+const IND_ORDER = ['bds', 'oto', 'hotel', 've', 'daugia', 'limited'];
+const IND_ICON = { all: 'M4 6h16M4 12h16M4 18h16', bds: 'M4 20V8l8-4 8 4v12M9 20v-6h6v6', oto: 'M5 16h14M6 16l1.5-5h9L18 16M7 19a1.5 1.5 0 1 0 0-.01M17 19a1.5 1.5 0 1 0 0-.01', hotel: 'M3 19V7M3 13h18v6M7 13V9h6v4', ve: 'M4 8a2 2 0 0 0 0 4v4h16v-4a2 2 0 0 1 0-4V4H4zM14 4v16', daugia: 'M14 6l4 4M12 8l4 4M4 20l8-8M10 6l6 6-2 2-6-6z', limited: 'M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.6 7.1 18.2l.9-5.5-4-3.9 5.5-.8z' };
+const GROUPS = [
+  { id: 'sell', label: 'Bán hàng thời gian thực', head: 'Bán hàng giới hạn, thời gian thực', sub: 'Một món chỉ một người giữ được. Mọi người bán thấy cùng một giỏ hàng. Tiền về mới chuyển bước.' },
+  { id: 'care', label: 'Thu hút & chăm sóc khách hàng', head: 'Không để lọt khách nào', sub: 'Gom lead từ mọi kênh, chăm khách sau bán, tổng đài đa kênh.' },
+  { id: 'ops', label: 'Quản lý vận hành', head: 'Vận hành đội ngũ và tài sản', sub: 'Đào tạo đội bán, quản lý toà nhà và tài sản.' },
+  { id: 'device', label: 'Thiết bị & Robot', head: 'Nối thiết bị vào hệ thống iHouzz', sub: 'iHouzz làm phần mềm tích hợp; phần cứng theo hãng đối tác.' },
+  { id: 'partner', label: 'Giải pháp từ đối tác', head: 'Giải pháp đối tác do iHouzz triển khai', sub: 'Công cụ nền cho doanh nghiệp bán hàng, gắn với hệ thống iHouzz.' }
+];
+const URL = { ve: 'https://claude.ai/artifact/7v1yKBaezhHqV4Bsz2j4AW', daugia: 'https://claude.ai/artifact/CJ2ji6QpCR4dyArsbTagRi', bds: 'https://claude.ai/artifact/KneGTMw9n6XgezaVwWjQWG', proto: 'https://claude.ai/artifact/QykN1LLWgZ1iomfNZ4dzSz' };
+const SHOWS = [
+  { t: 'PropSales đa ngành', d: 'Một màn hình đổi qua 5 ngành: BĐS, ô tô, khách sạn/tour, vé, hàng giới hạn', ind: '*', nav: 'propsales', c: '#1F4E79', tag: 'Đa ngành' },
+  { t: 'Bán vé concert theo sơ đồ ghế', d: '431 ghế, 4 hạng vé; 47 lượt bấm cùng một ghế VIP, chỉ một người giữ được', ind: 've', url: URL.ve, c: '#6B2E8C', tag: 'Vé sự kiện' },
+  { t: 'Đấu giá biển số trực tuyến', d: 'Tiền đặt trước mở cửa phòng, giá dẫn đổi trên mọi màn hình, dồn lệnh 15 giây cuối', ind: 'daugia', url: URL.daugia, c: '#7A2E2E', tag: 'Đấu giá' },
+  { t: 'Một ngày mở bán căn hộ', d: 'Sáu cảnh từ 08:00 tới lúc hết giỏ hàng: 200 người bấm một căn, 1 người giữ được', ind: 'bds', url: URL.bds, c: '#14263B', tag: 'BĐS dự án' },
+  { t: 'Chạy thử nhiều người dùng', d: 'Chủ hàng, người bán, kế toán thao tác cùng lúc trên một đợt bán chung', ind: '*', url: URL.proto, c: '#0F6E5C', tag: 'Prototype' }
+];
+const P = [
+  { id: 'psales', g: 'sell', inds: ['*'], name: 'PropSales', mark: 'PS', color: '#1F4E79', banner: 'grid', feat: 3, platform: 'Web · Mobile', nav: 'propsales', short: 'Nền tảng bán hàng realtime',
+    tag: i => `Bán ${i ? INDS[i].unit : 'hàng giới hạn'} qua nhiều ${i ? INDS[i].seller : 'người bán'} cùng lúc — mỗi ${i ? INDS[i].unit : 'món'} chỉ một người giữ được`,
+    about: i => `Nền tảng cho hàng có hạn, mỗi ${i ? INDS[i].unit : 'món'} là duy nhất, bán cùng lúc qua nhiều ${i ? INDS[i].seller : 'người bán'}, trong đó tiền quyết định trạng thái. Dùng được cho mọi ngành có đủ bốn điều kiện: hàng định danh từng món, số lượng có hạn, nhiều người bán cùng lúc, ${i ? INDS[i].money.toLowerCase() : 'cọc hoặc thanh toán'} quyết định trạng thái.`,
+    facts: [['Khoá tranh chấp', 'Nhiều người bấm, một người giữ'], ['Đồng bộ tức thời', 'Mọi người bán cùng một giỏ'], ['Tiền quyết định', 'Tiền về mới chuyển bước']],
+    feats: ['Khoá hàng khi nhiều người cùng bấm giữ', 'Đồng bộ trạng thái giỏ hàng tức thời cho mọi người bán', 'Tiền cọc hoặc thanh toán quyết định bước tiếp theo', 'Hết hạn giữ chỗ, hàng tự về giỏ', 'Tải nhập giỏ hàng, bảng giá theo thời điểm hiệu lực', 'Chính sách bán hàng cấu hình được', 'Bảng theo người bán và báo cáo sau mỗi đợt'], terms: true, rel: ['ctv', 'esign', 'kiosk'] },
+  { id: 'auction', g: 'sell', inds: ['daugia'], name: 'Đấu giá trực tuyến', mark: 'ĐG', color: '#7A2E2E', banner: 'auction', feat: 2, status: 'demo', platform: 'Web · Mobile', url: URL.daugia, short: 'Phòng đấu giá realtime', tag: 'Tiền đặt trước mở cửa phòng, giá dẫn đổi đồng thời trên mọi màn hình, lệnh tới trước được ghi nhận',
+    about: 'Phòng đấu giá trực tuyến chạy trên cùng lõi PropSales. Chỉ người đã nộp tiền đặt trước mới vào phòng. Hai lệnh cùng mức giá thì lệnh tới trước được ghi nhận, lệnh sau bị từ chối kèm mức hợp lệ tiếp theo.',
+    facts: [['Tiền đặt trước', 'Quyết định quyền vào phòng'], ['Giá dẫn realtime', 'Đổi trên mọi màn hình'], ['Đóng đúng giờ', 'Lệnh trễ bị từ chối']], feats: ['Biển số xe, đất, tài sản', 'Bước giá và giá khởi điểm cấu hình được', 'Dồn lệnh giây cuối, đóng đúng giờ', 'Hoàn tiền đặt trước cho người không trúng'], rel: ['psales', 'esign'] },
+  { id: 'ctv', g: 'sell', inds: ['*'], name: '[Tên] CTV & Đại lý', mark: 'CT', color: '#4F5A1C', banner: 'plain', cap: 'MẠNG LƯỚI BÁN', feat: 1, platform: 'Web', short: 'Quản lý mạng lưới bán', tag: 'Chính sách, hoa hồng và theo dõi mạng lưới cộng tác viên, đại lý',
+    about: 'Số hoá chính sách cộng tác viên và đại lý: bậc hoa hồng, bảng theo dõi, dashboard. Chạy trên cùng lõi PropSales. [Mô tả chi tiết]', facts: [['Chính sách', 'Bậc hoa hồng rõ ràng'], ['Dashboard', 'Theo dõi mạng lưới'], ['Web', 'Nền tảng']], feats: ['Cấu hình chính sách CTV, đại lý', 'Tính hoa hồng', 'Dashboard mạng lưới'], rel: ['psales', 'onebox'] },
+  { id: 'stock', g: 'sell', inds: ['bds'], name: 'PropStock', mark: 'St', color: '#0F6E5C', banner: 'cards', status: 'dev', platform: 'Mobile', short: 'Kho hàng và nhóm kín cho môi giới', tag: 'Kho hàng cá nhân và nhóm kín cho môi giới — che số chủ nhà, ghi dấu người đăng',
+    about: 'Môi giới đi tìm hàng và quản lý hàng cá nhân để trao đổi trong nhóm kín. Hàng chỉ thành viên trong nhóm thấy, số chủ nhà được che, người đăng được ghi dấu.', facts: [['Nhóm kín', 'Chỉ thành viên thấy hàng'], ['Bảo vệ kèo', 'Che số, ghi dấu người đăng'], ['Mobile', 'Dùng trên điện thoại']], feats: ['Kho cá nhân ba nguồn: tự có, từ dự án, nhóm gửi', 'Nhóm kín', 'Che số chủ nhà', 'Ghi dấu người đăng', 'Nhận kèo kèm tỷ lệ chia hoa hồng'], rel: ['psales', 'onebox'] },
+  { id: 'onebox', g: 'care', inds: ['*'], name: 'OneBox', mark: 'OB', color: '#6B3590', banner: 'inbox', feat: 3, platform: 'Web', short: 'Quản lý lead đa kênh', tag: 'Gom lead từ mọi kênh về một hộp, chia về đúng người',
+    about: 'Lead từ Zalo, Facebook, website, hotline và form trong các công cụ của iHouzz về chung một hộp. Mỗi lead có người phụ trách và trạng thái rõ ràng.', facts: [['Đa kênh', 'Một hộp cho mọi nguồn'], ['Chia lead', 'Về đúng người phụ trách'], ['Web', 'Nền tảng']], feats: ['Gom lead từ nhiều kênh', 'Chia lead theo quy tắc', 'Nhận lead từ robot, kiosk, form web', '[Tính năng khác]'], rel: ['contact', 'care', 'psales'] },
+  { id: 'contact', g: 'care', inds: ['*'], name: 'Tổng đài thông minh', mark: 'TĐ', color: '#3B4A8C', banner: 'plain', cap: 'GỌI · NHẮN · CALLBOT 24/7', feat: 2, partner: true, platform: 'Đối tác', short: 'Tổng đài đa kênh, callbot AI', tag: 'Mọi kênh gọi, nhắn gom về một nơi, có callbot AI trực 24/7',
+    about: 'Omnichannel và callbot AI do iHouzz triển khai qua đối tác. Nối với OneBox và PropCare: thông báo trạng thái đơn, nhắc thanh toán, lưu lịch sử làm việc với khách.', facts: [['Đa kênh', 'Gọi, nhắn một nơi'], ['Callbot AI', 'Trực 24/7'], ['Đối tác', 'iHouzz triển khai']], feats: ['Gom cuộc gọi và tin nhắn', 'Callbot AI', 'Nhắc thanh toán tự động', 'Lịch sử làm việc với khách'], rel: ['onebox', 'care'] },
+  { id: 'care', g: 'care', inds: ['*'], name: 'PropCare', mark: 'PC', color: '#A62B48', banner: 'plain', cap: 'CHĂM SÓC SAU BÁN', feat: 1, platform: 'Mobile', short: 'Chăm sóc khách sau bán', tag: 'App chăm sóc khách hàng sau khi mua', about: 'App chăm sóc khách hàng sau khi mua. [Mô tả chi tiết]', facts: [['Sau bán', 'Giữ liên lạc với khách'], ['[—]', '[—]'], ['Mobile', 'Nền tảng']], feats: ['[Tính năng 1]', '[Tính năng 2]', '[Tính năng 3]'], rel: ['onebox', 'contact'] },
+  { id: 'mngd', g: 'care', inds: ['bds'], name: 'Mua Nhà Giá Đúng', mark: 'MN', color: '#0F6E5C', banner: 'plain', cap: 'CÔNG CỤ MIỄN PHÍ', status: 'free', platform: 'Web', short: 'Công cụ miễn phí cho người mua nhà', tag: 'Pháp lý, vay mua, kiểm tra quy hoạch — miễn phí cho người đi mua nhà',
+    about: 'Web app cho người mua nhà với các công cụ cần dùng khi đi mua: pháp lý, vay mua, kiểm tra quy hoạch. Toàn bộ miễn phí; người dùng để lại thông tin thì lead về OneBox.', facts: [['Miễn phí', 'Không cần đăng ký'], ['5 công cụ v1', 'Pháp lý · Vay · Quy hoạch'], ['Web', 'Nền tảng']], feats: ['Pháp lý dự án', 'Pháp lý nhà phố', 'Vay mua dự án', 'Vay mua nhà phố', 'Kiểm tra quy hoạch'], rel: ['onebox'], calc: true },
+  { id: 'mate', g: 'ops', inds: ['*'], name: 'PropMate', mark: 'PM', color: '#9A4318', banner: 'plain', cap: 'ĐÀO TẠO ĐỘI BÁN', feat: 2, platform: 'Web', short: 'Đào tạo đội bán', tag: 'Đào tạo và onboarding đội bán, người mới vào việc nhanh', about: 'Đào tạo và onboarding cho đội ngũ bán hàng. [Mô tả chi tiết]', facts: [['Onboarding', 'Người mới vào việc nhanh'], ['[—]', '[—]'], ['Web', 'Nền tảng']], feats: ['[Tính năng 1]', '[Tính năng 2]', '[Tính năng 3]'], rel: ['psales', 'ctv'] },
+  { id: 'building', g: 'ops', inds: ['bds'], name: 'PropBuilding', mark: 'PB', color: '#2D5A8C', banner: 'plain', cap: 'VẬN HÀNH TOÀ NHÀ', feat: 1, platform: 'Web', short: 'Vận hành toà nhà', tag: 'Quản lý vận hành toà nhà', about: 'Quản lý vận hành toà nhà. [Mô tả chi tiết]', facts: [['Toà nhà', 'Vận hành một chỗ'], ['[—]', '[—]'], ['Web', 'Nền tảng']], feats: ['[Tính năng 1]', '[Tính năng 2]', '[Tính năng 3]'], rel: ['devices', 'cocc'] },
+  { id: 'e3', g: 'ops', inds: ['bds'], name: '[Tên] Tài sản gia đình', mark: 'E3', color: '#5A4A3A', banner: 'plain', cap: 'NHIỀU NHÀ · NHIỀU ĐẤT', status: 'soon', platform: 'Mobile', short: 'Quản lý nhiều nhà, nhiều đất', tag: 'Theo dõi nhiều nhà, nhiều đất ở một nơi', about: 'Một nơi theo dõi toàn bộ nhà đất của gia đình. [Mô tả chi tiết]', facts: [['Nhiều tài sản', 'Một nơi theo dõi'], ['Sắp ra mắt', 'Đang lên ý tưởng'], ['Mobile', 'Nền tảng']], feats: ['[Tính năng 1]', '[Tính năng 2]'], rel: ['building', 'mngd'] },
+  { id: 'ketty', g: 'device', inds: ['*'], name: 'Robot KettyBot', mark: 'KB', color: '#1F4E79', banner: 'plain', cap: 'ĐÓN KHÁCH · TRÌNH CHIẾU GIỎ HÀNG · DẪN ĐƯỜNG', feat: 3, status: 'demo', platform: 'Robot dịch vụ', nav: 'robots', robot: 'kettybot', short: 'Robot trình diễn tại sự kiện, sàn bán', tag: 'Robot đón khách, check-in, trình chiếu giỏ hàng realtime tại sự kiện, nối thẳng vào hệ thống iHouzz',
+    about: 'Robot dịch vụ mang giao diện, giọng nói và phần mềm của iHouzz; phần cứng theo hãng đối tác. Tại sự kiện: đón khách, check-in QR đẩy lead về OneBox, trình chiếu giỏ hàng realtime từ PropSales trên màn 32 inch, dẫn khách tới quầy.', facts: [['Check-in QR', 'Lead về OneBox'], ['Giỏ hàng di động', 'Realtime từ PropSales'], ['Phần mềm iHouzz', 'Phần cứng theo hãng']], feats: ['Đón khách, check-in QR', 'Trình chiếu giỏ hàng realtime', 'Báo căn vừa giữ bằng đèn và màn hình', 'Dẫn khách tới quầy', 'Mang quà khi cọc được xác nhận'], rel: ['psales', 'onebox', 'kiosk'] },
+  { id: 'cocc', g: 'device', inds: ['*'], name: 'Robot COCC', mark: 'CO', color: '#0E6E7A', banner: 'plain', cap: 'CHĂM SÓC ÔNG BÀ · NHẮC THUỐC · GỌI VIDEO', feat: 2, status: 'demo', platform: 'Robot chăm sóc', nav: 'robots', robot: 'cocc', short: 'Robot chăm sóc người cao tuổi', tag: 'Sống cùng ông bà: nhắc thuốc, trò chuyện, phát hiện ngã và báo ngay cho người thân',
+    about: 'Robot đồng hành cùng ông bà tại nhà hoặc viện dưỡng lão, chạy phần mềm của iHouzz; phần cứng theo hãng đối tác. Nhắc thuốc và lịch sinh hoạt bằng giọng nói tiếng Việt, gọi video cho con cháu bằng một câu nói, phát hiện ngã và gửi cảnh báo về ứng dụng của gia đình.', facts: [['Nhắc thuốc', 'Đúng giờ, bằng giọng nói'], ['Phát hiện ngã', 'Báo ngay cho người thân'], ['Gọi video', 'Chỉ cần một câu nói']], feats: ['Nhắc uống thuốc, ăn uống, vận động đúng giờ', 'Trò chuyện tiếng Việt', 'Gọi video cho con cháu', 'Phát hiện ngã, gửi cảnh báo về app gia đình', 'Hỗ trợ điều dưỡng tại viện dưỡng lão'], rel: ['building', 'devices', 'care'] },
+  { id: 'kiosk', g: 'device', inds: ['*'], name: 'Kiosk giỏ hàng', mark: 'KS', color: '#1F4E79', banner: 'grid', feat: 2, status: 'soon', platform: 'Màn hình sự kiện', short: 'Màn hình giỏ hàng tại sự kiện', tag: i => `Màn hình tại sự kiện — ${i ? INDS[i].unit : 'hàng'} đổi màu ngay khi có người giữ, đẩy thẳng từ PropSales`,
+    about: 'Màn hình và kiosk tại điểm bán hoặc sự kiện, lấy dữ liệu trực tiếp từ PropSales. Hàng đổi màu ngay khi có người giữ chỗ.', facts: [['Realtime', 'Đẩy thẳng từ lõi'], ['Sắp ra mắt', 'Đề xuất, chưa chốt'], ['Kiosk', 'Thiết bị']], feats: ['Hiển thị giỏ hàng realtime', 'Đồng bộ với PropSales'], rel: ['psales', 'ketty'] },
+  { id: 'devices', g: 'device', inds: ['bds'], name: 'Thiết bị toà nhà', mark: 'TB', color: '#2D5A8C', banner: 'plain', cap: 'KẾT NỐI THIẾT BỊ', status: 'soon', platform: 'IoT', short: 'Ra vào, điện nước, cảm biến', tag: 'Ra vào, đồng hồ điện nước, camera, cảm biến — dữ liệu về PropBuilding', about: 'Nối thiết bị toà nhà vào hệ thống iHouzz. Dữ liệu chảy về PropBuilding.', facts: [['IoT', 'Nối thiết bị'], ['Sắp ra mắt', 'Đề xuất, chưa chốt'], ['PropBuilding', 'Nơi nhận dữ liệu']], feats: ['Kiểm soát ra vào', 'Đồng hồ điện nước', 'Camera', 'Cảm biến'], rel: ['building'] },
+  { id: 'm365', g: 'partner', inds: ['*'], name: 'Microsoft 365 Business Premium', mark: '365', color: '#2F4F86', banner: 'plain', cap: 'GIỮ DỮ LIỆU KHÁCH HÀNG', feat: 2, partner: true, platform: 'iHouzz phân phối', short: 'Giữ dữ liệu khách hàng lại công ty', tag: 'Dữ liệu khách hàng nằm lại với công ty, kể cả khi nhân viên nghỉ việc',
+    about: 'iHouzz phân phối và triển khai Microsoft 365 Business Premium. Với doanh nghiệp bán hàng: khoá dữ liệu khách trên máy nhân viên bán, thu hồi khi nhân viên nghỉ.', facts: [['Giữ dữ liệu', 'Khi nhân viên nghỉ việc'], ['Quản lý thiết bị', 'Máy nhân viên bán'], ['Phân phối', 'iHouzz triển khai']], feats: ['Quản lý thiết bị nhân viên', 'Bảo vệ dữ liệu khách hàng', 'Email, tài liệu, họp trực tuyến'], rel: ['onebox', 'esign'] },
+  { id: 'esign', g: 'partner', inds: ['*'], name: 'Ký & Xác thực số', mark: 'eS', color: '#4A5A2A', banner: 'plain', cap: 'eKYC · HỢP ĐỒNG ĐIỆN TỬ', feat: 3, partner: true, platform: 'Đối tác', short: 'Ký cọc, ký hợp đồng trên điện thoại', tag: 'Xác minh đúng người, ký cọc và ký hợp đồng ngay trên điện thoại',
+    about: 'Hợp đồng điện tử và eKYC do iHouzz triển khai qua đối tác. Gắn vào bước cọc và hợp đồng trong PropSales: chống giữ chỗ ảo, tiền và chữ ký cùng quyết định trạng thái.', facts: [['eKYC', 'Đúng người'], ['Ký trên điện thoại', 'Phiếu cọc, hợp đồng'], ['Đối tác', 'iHouzz triển khai']], feats: ['Xác minh danh tính', 'Ký phiếu cọc', 'Ký hợp đồng', 'Chống giữ chỗ ảo'], rel: ['psales', 'auction'] }
+];
+const BY = Object.fromEntries(P.map(p => [p.id, p]));
+const val = (v, i) => typeof v === 'function' ? v(i) : v;
+const bdsOnly = p => p.inds.length === 1 && p.inds[0] === 'bds';
+const PATTERN = 'aaahaasaaaahaaasaahaasaaahaaasaaaahsaaahaaasa';
+const CELL = { a: '#E8EEF5', h: '#F2B84B', s: '#E8703A' };
+const INBOX = [['Z', '#0068FF', 'MỚI'], ['F', '#3B5998', 'ĐÃ CHIA'], ['W', '#3A3D45', 'MỚI'], ['H', '#0F6E5C', 'GỌI LẠI'], ['R', '#0E6E7A', 'ROBOT']];
+const PILL = { dev: ['Đang phát triển', '#fff4e0', '#9a5b00'], soon: ['Sắp ra mắt', '#e6eff8', '#0b3f6b'], free: ['Miễn phí', '#e8f7ef', '#137a50'], demo: ['Có bản chạy thử', '#efe9ff', '#5b3fc4'] };
+const fmt = v => v >= 1e9 ? (v / 1e9).toLocaleString('vi-VN', { maximumFractionDigits: 2 }) + ' tỷ' : Math.round(v / 1e6).toLocaleString('vi-VN') + ' triệu';
+
+class Component extends DCLogic {
+  state = { tab: 'sell', ind: 'all', q: '', detail: null, cells: PATTERN.slice(0, 40).split(''), inboxK: 0, rot: 0, price: 1500, sec: 45, who: 0, bids: ['TG-0147 · 1.500', 'TG-0231 · 1.495'], calc: { price: 6, ltv: 60, rate: 9.5, years: 20 } };
+  topRef = React.createRef(); calcRef = React.createRef();
+  componentDidMount() {
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    this.t = setInterval(() => this.tick(), 1000);
+  }
+  componentWillUnmount() { clearInterval(this.t); }
+  tick() {
+    this.setState(s => {
+      const cells = s.cells.slice(); const k = Math.floor(Math.random() * 40);
+      if (cells[k] === 'h') cells[k] = Math.random() < .5 ? 's' : 'a'; else if (cells[k] === 'a') cells[k] = 'h';
+      if (cells.filter(c => c === 's').length > 14) cells[cells.indexOf('s')] = 'a';
+      let { price, sec, who, bids } = s; sec--; if (sec < 0) { sec = 45; price = 1500; }
+      if (Math.random() < .45) { price += 5; who++; bids = [(who % 2 ? 'TG-0231' : 'TG-0147') + ' · ' + price.toLocaleString('vi-VN'), ...bids].slice(0, 3); }
+      const n = { cells, price, sec, who, bids };
+      if (s.sec % 2 === 0) n.inboxK = s.inboxK + 1;
+      if (s.sec % 3 === 0) n.rot = s.rot + 1;
+      return n;
+    });
+  }
+  scrollTop() { const el = this.topRef.current; if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 70, behavior: 'smooth' }); }
+  open(id) { this.setState({ detail: id, q: '' }); this.scrollTop(); }
+  demo(id) { const I = this.state.ind; const p = BY[id]; this.props.onDemo && this.props.onDemo(p ? p.name : 'PropSales', I !== 'all' ? INDS[I].form : null); }
+  nav(k, x) { this.props.onNav && this.props.onNav(k, x); }
+
+  renderVals() {
+    const S = this.state, I = S.ind === 'all' ? null : S.ind, T = I ? INDS[I] : INDS.bds;
+    const fits = p => S.ind === 'all' ? !bdsOnly(p) : (p.inds.includes('*') || p.inds.includes(S.ind));
+    const pill = p => PILL[p.status] || null;
+    const bannerOf = p => ({ bg: p.banner === 'grid' ? '#14263B' : p.color, isGrid: p.banner === 'grid', isInbox: p.banner === 'inbox', isAuction: p.banner === 'auction', isCards: p.banner === 'cards', isPlain: !['grid', 'inbox', 'auction', 'cards'].includes(p.banner) });
+    const card = p => { const pl = pill(p); return { ...bannerOf(p), id: p.id, name: p.name, mark: p.mark, color: p.color, cap: p.cap || '', short: p.short, tag: val(p.tag, I),
+      meta: [pl && pl[0], p.platform].filter(Boolean).join(' · '), badge: p.status === 'soon' ? 'Sắp ra mắt' : p.partner ? 'Đối tác' : '',
+      pill: pl ? pl[0] : '', pillBg: pl ? pl[1] : '', pillFg: pl ? pl[2] : '', open: () => this.open(p.id) }; };
+    const g = GROUPS.find(x => x.id === S.tab);
+    const list = P.filter(p => p.g === S.tab && fits(p));
+    const featured = [...list].sort((a, b) => (b.feat || 0) - (a.feat || 0)).slice(0, 3);
+    const hidden = S.ind === 'all' ? P.filter(p => p.g === S.tab && bdsOnly(p)).length : 0;
+    const q = S.q.trim().toLowerCase();
+    const indHit = IND_ORDER.filter(k => INDS[k].label.toLowerCase().includes(q));
+    const results = q ? P.filter(p => (p.name + ' ' + val(p.tag, null) + ' ' + p.short + ' ' + p.feats.join(' ')).toLowerCase().includes(q) || indHit.some(k => p.inds.includes(k) || (p.inds.includes('*') && p.g === 'sell'))) : [];
+    const mode = q ? 'search' : S.detail ? 'detail' : 'home';
+    const dp = S.detail && BY[S.detail];
+    let d = {};
+    if (dp) {
+      const pl = pill(dp); const dg = GROUPS.find(x => x.id === dp.g);
+      const sec = dp.nav === 'propsales' ? ['Xem showcase PropSales ▸', () => this.nav('propsales')] : dp.nav === 'robots' ? ['Trải nghiệm robot 3D ▸', () => this.nav('robots', dp.robot)] : dp.url ? ['Xem bản chạy thử ↗', () => window.open(dp.url, '_blank', 'noopener')] : null;
+      d = { ...bannerOf(dp), name: dp.name, mark: dp.mark, color: dp.color, cap: dp.cap || '', groupLabel: dg.label,
+        byline: (dp.partner ? 'Đối tác · iHouzz triển khai' : 'iHouzz') + ' · ' + dg.label,
+        inds: dp.inds.includes('*') ? ['Mọi ngành'] : dp.inds.map(k => INDS[k].label),
+        pill: pl ? pl[0] : '', pillBg: pl ? pl[1] : '', pillFg: pl ? pl[2] : '',
+        facts: dp.facts.map(([a, b]) => ({ a, b })), about: val(dp.about, I), featTitle: dp.calc ? 'Bộ công cụ v1' : 'Tính năng chính', feats: dp.feats,
+        terms: !!dp.terms, calc: !!dp.calc,
+        primaryLabel: dp.calc ? 'Dùng thử công cụ vay' : dp.status === 'soon' ? 'Đăng ký nhận tin' : 'Đặt lịch demo',
+        primary: dp.calc ? () => { const el = this.calcRef.current; if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' }); } : () => this.demo(dp.id),
+        hasSecondary: !!sec, secondaryLabel: sec ? sec[0] : '', secondary: sec ? sec[1] : null,
+        demo: () => this.demo(dp.id),
+        rel: dp.rel.map(id => BY[id]).filter(Boolean).map(r => ({ name: r.name, short: r.short, mark: r.mark, color: r.color, open: () => this.open(r.id) })) };
+    }
+    const C = S.calc; const P0 = C.price * 1e9, loan = P0 * Math.min(C.ltv, 100) / 100, r = C.rate / 100 / 12, n = Math.max(1, Math.round(C.years * 12)); const m = r ? loan * r / (1 - Math.pow(1 + r, -n)) : loan / n;
+    const setC = k => e => { const v = parseFloat(e.target.value); this.setState(s => ({ calc: { ...s.calc, [k]: isNaN(v) ? 0 : v } })); };
+    const sec2 = s => '00:' + String(s).padStart(2, '0');
+    return {
+      topRef: this.topRef, calcRef: this.calcRef,
+      tabs: GROUPS.map(x => { const on = mode !== 'search' && (dp ? dp.g === x.id : S.tab === x.id); return { label: x.label, cur: on ? 'true' : 'false', fg: on ? '#1262a4' : '#0f1c2e', bar: on ? '#1262a4' : 'transparent', pick: () => { this.setState({ tab: x.id, detail: null, q: '' }); } }; }),
+      q: S.q, setQ: e => this.setState({ q: e.target.value }),
+      showChips: mode === 'home',
+      chips: [['all', 'Tất cả'], ...IND_ORDER.map(k => [k, INDS[k].label])].map(([id, label]) => { const on = id === S.ind; return { label, icon: IND_ICON[id], on: on ? 'true' : 'false', bg: on ? '#1262a4' : '#fff', fg: on ? '#fff' : '#0f1c2e', bd: on ? '#1262a4' : '#c9d1da', pick: () => this.setState({ ind: id }) }; }),
+      isHome: mode === 'home', isSearch: mode === 'search', isDetail: mode === 'detail',
+      showShows: S.tab === 'sell',
+      indSuffix: I ? ' · ' + T.label : '', indLower: I ? T.label.toLowerCase() : '',
+      shows: SHOWS.filter(s => S.ind === 'all' || s.ind === '*' || s.ind === S.ind).map(s => ({ ...s, cta: s.nav ? 'Mở showcase ▸' : 'Mở bản chạy thử ↗', open: s.nav ? () => this.nav(s.nav) : () => window.open(s.url, '_blank', 'noopener') })),
+      group: g, hasList: list.length > 0, noList: list.length === 0, listCount: list.length,
+      featured: featured.map(card), list: list.map(card), hiddenBds: hidden || 0,
+      allInd: () => this.setState({ ind: 'all' }), bdsInd: () => this.setState({ ind: 'bds' }),
+      results: results.map(card), resCount: results.length, noRes: results.length === 0,
+      d, back: () => { this.setState({ detail: null }); this.scrollTop(); },
+      gridTitle: I ? T.grid : IND_ORDER.map(k => INDS[k].grid)[S.rot % IND_ORDER.length], tHold: T.hold, tPaid: T.paid,
+      gridCells: S.cells.map(c => CELL[c]),
+      inbox: [0, 1, 2, 3].map(i => { const x = INBOX[(S.inboxK + 4 - i) % INBOX.length]; return { ch: x[0], c: x[1], st: x[2] }; }),
+      aPrice: S.price.toLocaleString('vi-VN') + ' triệu', aClock: sec2(S.sec), aBar: (S.sec / 45 * 100) + '%', aBids: S.bids.slice(0, 2),
+      kcards: ['Nhóm kín', 'Nhóm kín', 'Của tôi'],
+      termRows: IND_ORDER.map(k => ({ ...INDS[k], bg: k === I ? '#f2f7fc' : '#fff', fw: k === I ? '600' : '400' })),
+      calcFields: [['price', 'Giá nhà (tỷ đồng)', '0.1'], ['ltv', 'Tỷ lệ vay (%)', '5'], ['rate', 'Lãi suất (%/năm)', '0.1'], ['years', 'Thời hạn (năm)', '1']].map(([k, label, step]) => ({ label, step, v: C[k], set: setC(k) })),
+      calcOut: [['Vốn tự có cần chuẩn bị', fmt(P0 - loan), '#0f1c2e'], ['Khoản vay', fmt(loan), '#0f1c2e'], ['Trả mỗi tháng', fmt(m), '#1262a4'], ['Tổng lãi phải trả', fmt(m * n - loan), '#0f1c2e']].map(([label, v, c]) => ({ label, v, c })),
+    };
+  }
+}
+</script>
+</body>
+</html>

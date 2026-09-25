@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="font-family:'Be Vietnam Pro',system-ui,sans-serif;color:#0f1c2e">
+
+<section style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,80px) clamp(20px,4vw,48px) 0">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));border:1px solid #dde2e7;border-radius:12px;overflow:hidden;background:#fff">
+    <sc-for list="{{ tiers }}" as="t" hint-placeholder-count="3">
+      <button onClick="{{ t.jump }}" style="text-align:left;border:0;border-right:1px solid #e3e7ec;background:#fff;padding:24px 26px;cursor:pointer;display:grid;grid-template-columns:44px 1fr;gap:4px 14px;align-items:start" style-hover="background:#f4f6f8">
+        <span style="grid-row:span 2;font-size:40px;line-height:1;font-weight:700;color:#1262a4;letter-spacing:-.04em">{{ t.n }}</span>
+        <span style="font-size:17px;font-weight:600;letter-spacing:-.015em">Tầng {{ t.n }} · {{ t.name }}</span>
+        <span style="font-size:14px;line-height:1.55;color:#4a5868;text-wrap:pretty">{{ t.short }}</span>
+      </button>
+    </sc-for>
+  </div>
+</section>
+
+<section style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,72px) clamp(20px,4vw,48px);display:flex;flex-direction:column;gap:28px">
+  <div style="display:flex;flex-direction:column;gap:12px;max-width:680px">
+    
+    
+    
+  </div>
+  <div role="group" aria-label="Lọc theo vai trò" style="display:flex;flex-wrap:wrap;gap:8px">
+    <sc-for list="{{ filters }}" as="f" hint-placeholder-count="6">
+      <button onClick="{{ f.pick }}" aria-pressed="{{ f.on }}" style="border:1px solid {{ f.bd }};background:{{ f.bg }};color:{{ f.fg }};border-radius:999px;padding:8px 16px;font-size:14px;font-weight:500;cursor:pointer">{{ f.label }}</button>
+    </sc-for>
+  </div>
+
+  <sc-for list="{{ tierGroups }}" as="t" hint-placeholder-count="3">
+    <div id="{{ t.id }}" style="display:flex;flex-direction:column;gap:20px;padding-top:12px;scroll-margin-top:90px">
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 18px;align-items:baseline;padding-bottom:16px;border-bottom:1px solid #dde2e7">
+        <span style="grid-row:span 2;font-size:44px;line-height:1;font-weight:700;color:#1262a4;letter-spacing:-.04em">{{ t.n }}</span>
+        <h3 style="font-size:22px;line-height:1.3;letter-spacing:-.02em;font-weight:600">Tầng {{ t.n }} · {{ t.name }}</h3>
+        <p style="font-size:15px;line-height:1.6;color:#4a5868;max-width:760px;text-wrap:pretty">{{ t.desc }}</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:20px">
+        <sc-for list="{{ t.items }}" as="c" hint-placeholder-count="2">
+          <article style="display:flex;flex-direction:column;gap:16px;background:#fff;border:1px solid {{ c.border }};border-radius:12px;padding:26px;box-shadow:{{ c.shadow }}">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#6b7888;letter-spacing:.06em">{{ c.id }}</span>
+              <span style="font-size:12px;font-weight:600;border-radius:999px;padding:4px 10px;background:{{ c.stBg }};color:{{ c.stFg }}">{{ c.statusText }}</span>
+            </div>
+            <h3 style="font-size:21px;line-height:1.3;letter-spacing:-.02em;font-weight:600;text-wrap:balance">{{ c.name }}</h3>
+            <sc-if value="{{ c.law }}" hint-placeholder-val="{{ false }}">
+              <span style="align-self:flex-start;display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#8a5700;background:#fbf0da;border-radius:6px;padding:5px 10px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M5 21h14M6 7h12M6 7l-3 7h6zM18 7l-3 7h6z"></path></svg>{{ c.law }}</span>
+            </sc-if>
+            <p style="font-size:15px;line-height:1.6;color:#2c3a4a;text-wrap:pretty">{{ c.promise }}</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));border:1px solid #e3e7ec;border-radius:8px;overflow:hidden;background:#f8fafb">
+              <sc-for list="{{ c.facts }}" as="fa" hint-placeholder-count="3">
+                <div style="padding:10px 14px;border-right:1px solid #e3e7ec;display:flex;flex-direction:column;gap:2px">
+                  <span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6b7888">{{ fa.k }}</span>
+                  <span style="font-size:14px;font-weight:600">{{ fa.v }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <p style="font-size:14px;line-height:1.55;color:#4a5868">Dành cho: <strong style="color:#0f1c2e;font-weight:600">{{ c.forWho }}</strong>{{ c.forRest }}</p>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <span style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#1262a4">Mang về</span>
+              <sc-for list="{{ c.out }}" as="o" hint-placeholder-count="3">
+                <div style="display:flex;gap:10px;font-size:14.5px;line-height:1.5;color:#2c3a4a">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1262a4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:3px" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>
+                  <span>{{ o }}</span>
+                </div>
+              </sc-for>
+            </div>
+            
+            <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:auto;padding-top:4px">
+              <sc-if value="{{ c.isOpen }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ c.pick }}" style="border:0;background:#1262a4;color:#fff;padding:11px 18px;border-radius:6px;cursor:pointer;font-weight:600;font-size:14px" style-hover="background:#0b3f6b">{{ c.cta }}</button>
+              </sc-if>
+              <sc-if value="{{ c.notOpen }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ c.pick }}" style="border:1px solid #c9d1da;background:#fff;color:#0f1c2e;padding:10px 17px;border-radius:6px;cursor:pointer;font-weight:600;font-size:14px" style-hover="border-color:#1262a4;color:#1262a4">{{ c.cta }}</button>
+              </sc-if>
+              <sc-if value="{{ c.detail }}" hint-placeholder-val="{{ false }}">
+                <a href="{{ c.detail }}" target="_blank" rel="noopener" style="border:1px solid #c9d1da;background:#fff;color:#0f1c2e;padding:10px 17px;border-radius:6px;font-weight:600;font-size:14px;text-decoration:none">Xem trang khoá ↗</a>
+              </sc-if>
+            </div>
+          </article>
+        </sc-for>
+      </div>
+    </div>
+  </sc-for>
+  <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+    <p style="padding:24px;border:1px dashed #c9d1da;border-radius:12px;color:#6b7888;text-align:center">Chưa có khoá cho vai trò này.</p>
+  </sc-if>
+</section>
+
+<section style="background:#f4f6f8;border-block:1px solid #e3e7ec">
+  <div style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,72px) clamp(20px,4vw,48px);display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#1262a4">Cách dạy</div>
+      <h2 style="font-size:clamp(24px,2.6vw,32px);line-height:1.2;letter-spacing:-.025em;font-weight:700">Ba luật chung cho mọi khoá</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:28px">
+      <div style="border-top:2px solid #0f1c2e;padding-top:16px;display:flex;flex-direction:column;gap:8px"><h3 style="font-size:18px;font-weight:600;letter-spacing:-.015em">Dạy từ sản phẩm đang chạy</h3><p style="font-size:15px;line-height:1.6;color:#4a5868">Ví dụ trên lớp lấy từ hệ thống iHouzz đã triển khai, không lấy từ giáo trình. Tên khách hàng và dự án được giấu.</p></div>
+      <div style="border-top:2px solid #0f1c2e;padding-top:16px;display:flex;flex-direction:column;gap:8px"><h3 style="font-size:18px;font-weight:600;letter-spacing:-.015em">Làm trên việc của mình</h3><p style="font-size:15px;line-height:1.6;color:#4a5868">Không có bài tập mẫu. Học viên mang bài toán, bảng hàng hoặc chính sách thật của công ty vào lớp.</p></div>
+      <div style="border-top:2px solid #0f1c2e;padding-top:16px;display:flex;flex-direction:column;gap:8px"><h3 style="font-size:18px;font-weight:600;letter-spacing:-.015em">Đo bằng đầu ra</h3><p style="font-size:15px;line-height:1.6;color:#4a5868">Mỗi khoá ghi rõ học viên mang về cái gì. Không có đầu ra đó thì khoá chưa làm xong việc của nó.</p></div>
+    </div>
+  </div>
+</section>
+
+<section ref="{{ formRef }}" style="max-width:1200px;margin:0 auto;padding:clamp(48px,6vw,80px) clamp(20px,4vw,48px);display:flex;flex-direction:column;gap:28px;scroll-margin-top:80px">
+  <div style="display:flex;flex-direction:column;gap:12px;max-width:680px">
+    <div style="font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#1262a4">Đăng ký khoá học</div>
+    <h2 style="font-size:clamp(24px,2.6vw,32px);line-height:1.2;letter-spacing:-.025em;font-weight:700">Chọn khoá, để lại thông tin, iHouzz gọi lại</h2>
+    <p style="font-size:16px;line-height:1.65;color:#4a5868;text-wrap:pretty">Mỗi đăng ký được đọc thủ công. Với khoá chưa có lịch, đăng ký là vào danh sách chờ và được báo lịch trước tiên.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px;align-items:start">
+    <div style="grid-column:span 2;min-width:0;background:#fff;border:1px solid #dde2e7;border-radius:12px;padding:clamp(22px,3vw,32px);box-shadow:0 1px 3px rgba(15,28,46,.06)">
+      <form onSubmit="{{ submit }}" novalidate="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:16px">
+        <label style="grid-column:1/-1;display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Khoá quan tâm
+          <select value="{{ f.khoa }}" onChange="{{ setKhoa }}" style="border:1px solid #c9d1da;border-radius:6px;padding:11px 12px;font-size:15px;background:#fff;color:#0f1c2e">
+            <sc-for list="{{ options }}" as="op" hint-placeholder-count="10">
+              <option value="{{ op.id }}">{{ op.label }}</option>
+            </sc-for>
+          </select>
+          <span style="font-size:13px;font-weight:400;color:#6b7888">{{ hint }}</span>
+        </label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Họ và tên<input value="{{ f.ten }}" onChange="{{ setTen }}" autocomplete="name" placeholder="Nguyễn Văn A" style="border:1px solid #c9d1da;border-radius:6px;padding:11px 12px;font-size:15px"></label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Số điện thoại / Zalo<input value="{{ f.dt }}" onChange="{{ setDt }}" type="tel" autocomplete="tel" placeholder="09xx xxx xxx" style="border:1px solid #c9d1da;border-radius:6px;padding:11px 12px;font-size:15px"></label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Email<input value="{{ f.em }}" onChange="{{ setEm }}" type="email" autocomplete="email" placeholder="ten@congty.vn" style="border:1px solid #c9d1da;border-radius:6px;padding:11px 12px;font-size:15px"></label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Vai trò
+          <select value="{{ f.vt }}" onChange="{{ setVt }}" style="border:1px solid #c9d1da;border-radius:6px;padding:11px 12px;font-size:15px;background:#fff;color:#0f1c2e">
+            <option>Chủ doanh nghiệp</option><option>Lãnh đạo chủ đầu tư / sàn</option><option>Trưởng bộ phận</option><option>Kế toán / vận hành bán hàng</option><option>Nhân sự / đào tạo</option><option>Khác</option>
+          </select>
+        </label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Công ty và lĩnh vực<input value="{{ f.ct }}" onChange="{{ setCt }}" placeholder="Ví dụ: sàn phân phối căn hộ" style="border:1px solid #c9d1da;border-radius:6px;padding:11px 12px;font-size:15px"></label>
+        <label style="display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Số người muốn học<input value="{{ f.sl }}" onChange="{{ setSl }}" type="number" min="1" inputmode="numeric" placeholder="1" style="border:1px solid #c9d1da;border-radius:6px;padding:11px 12px;font-size:15px"></label>
+        <label style="grid-column:1/-1;display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:500">Anh chị muốn giải quyết việc gì?<textarea value="{{ f.ghi }}" onChange="{{ setGhi }}" rows="3" placeholder="Một câu là đủ. Ví dụ: đợt mở bán tới có 300 căn, 15 sàn, đang giữ chỗ bằng Excel và Zalo." style="border:1px solid #c9d1da;border-radius:6px;padding:11px 12px;font-size:15px;resize:vertical;line-height:1.55"></textarea></label>
+        <div style="grid-column:1/-1;display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:4px">
+          <button type="submit" style="border:0;background:#1262a4;color:#fff;padding:13px 22px;border-radius:6px;cursor:pointer;font-weight:600;font-size:15px" style-hover="background:#0b3f6b">Tạo phiếu đăng ký</button>
+          <span style="font-size:14px;color:{{ noteColor }}">{{ note }}</span>
+        </div>
+      </form>
+      <sc-if value="{{ ticket }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:22px;border:1px solid #1262a4;background:#eef4fa;border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:10px">
+          <h3 style="font-size:16px;font-weight:600;color:#0b3f6b">Phiếu đăng ký đã sẵn sàng</h3>
+          <p style="font-size:14.5px;line-height:1.6;color:#2c3a4a">Bước cuối: sao chép phiếu và gửi tới Zalo <strong style="font-family:'JetBrains Mono',monospace">0964 585 584</strong> hoặc email <strong style="font-family:'JetBrains Mono',monospace">andy@ihouzz.com</strong>. iHouzz gọi lại trong một ngày làm việc.</p>
+          <pre style="margin:0;white-space:pre-wrap;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.6;background:#fff;border:1px solid #dde2e7;border-radius:6px;padding:12px;max-height:260px;overflow:auto">{{ ticket }}</pre>
+          <button type="button" onClick="{{ copyTicket }}" style="align-self:flex-start;border:0;background:#1262a4;color:#fff;padding:10px 16px;border-radius:6px;cursor:pointer;font-weight:600;font-size:14px">{{ copyLabel }}</button>
+        </div>
+      </sc-if>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <div style="background:#fff;border:1px solid #dde2e7;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:4px">
+        <span style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6b7888;margin-bottom:6px">Liên hệ trực tiếp</span>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #eef1f4"><span style="font-family:'JetBrains Mono',monospace;font-size:14.5px">0964 585 584</span><button type="button" onClick="{{ copyPhone }}" style="border:1px solid #c9d1da;background:#f4f6f8;border-radius:6px;padding:5px 10px;font-size:12.5px;cursor:pointer;color:#2c3a4a">{{ phoneLabel }}</button></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0"><span style="font-family:'JetBrains Mono',monospace;font-size:14.5px">andy@ihouzz.com</span><button type="button" onClick="{{ copyMail }}" style="border:1px solid #c9d1da;background:#f4f6f8;border-radius:6px;padding:5px 10px;font-size:12.5px;cursor:pointer;color:#2c3a4a">{{ mailLabel }}</button></div>
+      </div>
+      <div style="background:#fff;border:1px solid #dde2e7;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6b7888">Sau khi gửi</span>
+        <ol style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px;font-size:14.5px;line-height:1.55;color:#2c3a4a">
+          <li>iHouzz gọi lại, hỏi thêm về bài toán của anh chị.</li>
+          <li>Nếu khoá chưa hợp, chúng tôi nói thẳng và gợi ý khoá khác.</li>
+          <li>Nếu hợp: nhận lịch học, thông tin chuyển khoản và buổi chuẩn bị.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="border-top:1px solid #e3e7ec">
+  <div style="max-width:900px;margin:0 auto;padding:clamp(48px,6vw,80px) clamp(20px,4vw,48px);display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#1262a4">Hỏi đáp</div>
+      <h2 style="font-size:clamp(24px,2.6vw,32px);line-height:1.2;letter-spacing:-.025em;font-weight:700">Trước khi đăng ký</h2>
+    </div>
+    <div style="border-top:1px solid #dde2e7">
+      <sc-for list="{{ faq }}" as="q" hint-placeholder-count="6">
+        <div style="border-bottom:1px solid #e3e7ec">
+          <button onClick="{{ q.toggle }}" aria-expanded="{{ q.open }}" style="width:100%;text-align:left;border:0;background:none;padding:18px 0;cursor:pointer;display:flex;justify-content:space-between;gap:16px;align-items:center;font-size:16px;font-weight:600;color:#0f1c2e">{{ q.q }}<span style="flex:none;color:#1262a4;font-size:20px;line-height:1">{{ q.mark }}</span></button>
+          <sc-if value="{{ q.open }}" hint-placeholder-val="{{ false }}">
+            <p style="padding-bottom:20px;font-size:15px;line-height:1.65;color:#4a5868;max-width:720px;text-wrap:pretty">{{ q.a }}</p>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = { role: 'all', open: 0, f: { khoa: 'XP01', ten: '', dt: '', em: '', vt: 'Chủ doanh nghiệp', ct: '', sl: '', ghi: '' }, ticket: '', err: false, copied: '' };
+  formRef = React.createRef();
+  static COMPANY = 'Đặt lớp theo công ty';
+  static TIERS = [
+    { n: 1, id: 'tang-1', name: 'Nền tảng số', short: 'Cho toàn bộ nhân sự. An toàn tài khoản, dữ liệu khách đúng luật, chống lừa đảo.', desc: 'Cho toàn bộ nhân sự. Mỗi người dùng máy tính, điện thoại và dữ liệu khách an toàn, đúng luật. Đặt lớp riêng theo công ty, có kiểm tra đầu vào và đầu ra.' },
+    { n: 2, id: 'tang-2', name: 'Ứng dụng AI', short: 'Theo vai trò: lãnh đạo, từng phòng ban, đội bán hàng. Kèm đọc số liệu để ra quyết định.', desc: 'Theo vai trò. Lãnh đạo đặt luật chơi trước, từng phòng ban đưa AI vào việc thật, quản lý đọc được số liệu để ra quyết định.' },
+    { n: 3, id: 'tang-3', name: 'Tự làm sản phẩm', short: 'Tự dựng phần mềm nội bộ bằng AI, vận hành đợt mở bán, sổ chính sách bán hàng.', desc: 'Cho người đã có bài toán cụ thể. Tự dựng phần mềm nội bộ, tự vận hành một đợt mở bán, tự dựng sổ chính sách bán hàng.' }
+  ];
+  static COURSES = [
+    { tier: 1, id: 'DS01', status: 'wait', statusText: 'Đặt lớp theo công ty', name: 'Digital Literacy cho Doanh nghiệp', promise: 'Phổ cập kỹ năng số cho toàn bộ nhân viên: tài khoản, mật khẩu, làm việc trên cloud, chia sẻ tài liệu đúng quyền, chữ ký số và hoá đơn điện tử.', facts: [['Hình thức', 'Lớp riêng'], ['Thời lượng', '4 buổi'], ['Học phí', 'Theo số người']], forWho: 'Toàn bộ nhân viên văn phòng', forRest: ', do chủ doanh nghiệp hoặc phòng nhân sự đặt.', out: ['Bài kiểm tra đầu vào và đầu ra cho từng nhân viên', 'Bảng kết quả theo phòng ban gửi chủ doanh nghiệp', 'Bộ quy tắc số một trang dán ở văn phòng'], roles: ['chu', 'nv', 'ql'], note: 'Nội dung chỉnh theo công cụ công ty đang dùng.' },
+    { tier: 1, id: 'DL01', status: 'soon', statusText: 'Buổi mở · lịch sắp công bố', name: 'Dữ Liệu Khách Hàng Đúng Luật', promise: 'Nhân viên nghỉ việc mang theo danh sách khách, dữ liệu khách nằm rải trên Zalo và điện thoại cá nhân. Buổi này chỉ chỗ rò và cách khoá lại.', law: 'Luật Bảo vệ dữ liệu cá nhân · hiệu lực 01/01/2026', facts: [['Hình thức', 'Online'], ['Thời lượng', '90 phút'], ['Học phí', 'Không thu phí']], forWho: 'Chủ doanh nghiệp, chủ sàn', forRest: ' có đội bán dùng điện thoại cá nhân.', out: ['Danh sách những chỗ dữ liệu khách đang rò ra', 'Ba thiết lập tối thiểu làm trong tuần đầu', 'Ước tính chi phí theo số nhân sự'], roles: ['chu', 'bds', 'ql'], note: 'Minh hoạ trên Microsoft 365 Business Premium.' },
+    { tier: 1, id: 'LD01', status: 'wait', statusText: 'Đặt lớp theo công ty', name: 'Chống Lừa Đảo Số cho Kế toán, Thủ quỹ', promise: 'Email giả nhà cung cấp, tin nhắn giả sếp, cuộc gọi giả giọng yêu cầu chuyển tiền gấp. Người giữ tiền của công ty cần nhận ra trước khi bấm chuyển.', facts: [['Hình thức', 'Lớp riêng'], ['Thời lượng', '2 giờ'], ['Học phí', 'Theo số người']], forWho: 'Kế toán, thủ quỹ, trợ lý giám đốc', forRest: ' và người duyệt chi.', out: ['Quy trình xác minh hai bước trước mọi lệnh chuyển tiền bất thường', 'Bài diễn tập với tình huống giả lập', 'Danh sách dấu hiệu nhận biết in ra để bàn'], roles: ['vh', 'chu', 'nv'], note: 'Tình huống diễn tập lấy theo quy trình chi tiền của công ty.' },
+    { tier: 2, id: 'AI01', status: 'wait', statusText: 'Nhận danh sách chờ', name: 'AI cho Lãnh đạo', promise: 'Việc nào giao được cho AI, việc nào không; tốn bao nhiêu tiền; rủi ro nằm ở đâu. Lãnh đạo ra về với luật chơi để cả công ty dùng AI.', law: 'Luật Trí tuệ nhân tạo · hiệu lực 01/03/2026', facts: [['Hình thức', 'Workshop'], ['Thời lượng', '1 buổi'], ['Học phí', 'Báo khi có lịch']], forWho: 'Chủ doanh nghiệp, ban giám đốc', forRest: '.', out: ['Bản quy chế dùng AI nội bộ, sửa theo công ty mình', 'Danh sách 5 việc nên thử AI trước, xếp theo lợi ích', 'Ước tính chi phí công cụ AI mỗi tháng'], roles: ['chu', 'ql', 'bds'], note: 'Nên học trước khi cho nhân viên dùng AI.' },
+    { tier: 2, id: 'AI02', status: 'wait', statusText: 'Nhận danh sách chờ', name: 'AI theo Phòng ban', promise: 'Kinh doanh, kế toán, nhân sự, mỗi phòng đưa AI vào đúng việc lặp lại của mình. Làm trên tài liệu thật, đo số giờ tiết kiệm được.', facts: [['Hình thức', 'Thực hành'], ['Thời lượng', '4 buổi'], ['Học phí', 'Báo khi có lịch']], forWho: 'Trưởng phòng và nhân viên văn phòng', forRest: '. Học theo nhóm cùng phòng.', out: ['5 quy trình của phòng đã chuyển sang dùng AI', 'Bảng số giờ trước và sau', 'Thư viện mẫu yêu cầu dùng chung cho cả phòng'], roles: ['ql', 'nv', 'vh'], note: 'Nhận lớp riêng theo công ty.' },
+    { tier: 2, id: 'AI03', status: 'wait', statusText: 'Nhận danh sách chờ', name: 'AI cho Đội Bán hàng', promise: 'Soạn nội dung giới thiệu sản phẩm, phân loại khách, viết tin chăm khách theo từng giai đoạn. Nhanh hơn mà không mất giọng của người bán.', facts: [['Hình thức', 'Thực hành'], ['Thời lượng', '2 buổi'], ['Học phí', 'Báo khi có lịch']], forWho: 'Giám đốc sàn, trưởng nhóm kinh doanh, môi giới', forRest: '.', out: ['Bộ mẫu nội dung cho sản phẩm đang bán', 'Kịch bản chăm khách theo giai đoạn', 'Cách phân loại lead để gọi đúng người trước'], roles: ['bds', 'ql', 'nv'], note: 'Ví dụ lấy từ bất động sản; áp dụng được cho ngành bán hàng khác.' },
+    { tier: 2, id: 'SL01', status: 'wait', statusText: 'Nhận danh sách chờ', name: 'Đọc Số Liệu cho Quản lý', promise: 'Có báo cáo nhưng không biết nhìn vào đâu. Khoá này dạy đọc một bảng số để ra quyết định, và hỏi AI đúng câu về dữ liệu của mình.', facts: [['Hình thức', 'Workshop'], ['Thời lượng', '2 buổi'], ['Học phí', 'Báo khi có lịch']], forWho: 'Quản lý, trưởng phòng', forRest: ' nhận báo cáo hằng tuần.', out: ['Một trang báo cáo tuần tự dựng, chỉ giữ số dùng để ra quyết định', 'Năm lỗi đọc số liệu hay gặp', 'Cách kiểm tra lại con số AI đưa ra'], roles: ['ql', 'chu', 'vh'], note: 'Mang theo một báo cáo thật của phòng.' },
+    { tier: 3, id: 'XP01', flag: true, status: 'open', statusText: 'Đang nhận đăng ký', name: 'Xưởng Phần Mềm Một Người', promise: 'Người không biết code tự dựng phần mềm nội bộ bằng AI. Sáu tuần sau, công ty có một phần mềm đang chạy thật.', facts: [['Hình thức', 'Cohort online'], ['Thời lượng', '6 tuần · 2h/tuần'], ['Học phí', '19.600.000đ']], forWho: 'Chủ doanh nghiệp, lãnh đạo, trưởng bộ phận', forRest: ' có một quy trình thật đang làm tay.', out: ['Một phần mềm nội bộ có người đang dùng hằng ngày', 'Bộ spec dùng lại được để giao cho dev thuê ngoài', 'Bảng chi phí vận hành thật mỗi tháng'], roles: ['chu', 'ql', 'bds'], detail: 'https://claude.ai/artifact/VRCgFfUq4gsEnPc2Jso8RG', note: 'Sĩ số 12. Giá 9.600.000đ cho 5 suất đầu, từ suất thứ 6: 12.000.000đ.' },
+    { tier: 3, id: 'MB01', status: 'wait', statusText: 'Nhận danh sách chờ', name: 'Vận Hành Một Đợt Mở Bán', promise: 'Từ chuẩn bị giỏ hàng tới chốt cọc: làm sao cho hàng trăm người bán cùng lúc mà không một căn nào bị giữ hai lần.', facts: [['Hình thức', 'Workshop'], ['Thời lượng', '1 ngày'], ['Học phí', 'Báo khi có lịch']], forWho: 'Chủ đầu tư, giám đốc sàn, trưởng vận hành bán hàng', forRest: ' sắp có đợt mở bán.', out: ['Kịch bản ngày mở bán theo từng mốc giờ', 'Luật giữ chỗ, hết hạn giữ, duyệt cọc viết ra giấy', 'Bảng kiểm tra giỏ hàng trước giờ mở'], roles: ['bds', 'vh'], note: 'Áp dụng cho căn hộ, ô tô, tour, vé sự kiện: hàng định danh, số lượng có hạn, nhiều bên bán cùng lúc.' },
+    { tier: 3, id: 'CS01', status: 'wait', statusText: 'Nhận danh sách chờ', name: 'Sổ Chính Sách Bán Hàng Kiểm Toán Được', promise: 'Đưa chiết khấu, tiến độ thanh toán, hoa hồng về một cuốn sổ có phiên bản, để giá mỗi hồ sơ tính lại được và không ai cãi nhau lúc đối soát.', facts: [['Hình thức', 'Workshop'], ['Thời lượng', '2 buổi'], ['Học phí', 'Báo khi có lịch']], forWho: 'Kế toán bán hàng, admin sàn, phòng kinh doanh chủ đầu tư', forRest: '.', out: ['Sổ chính sách trên Excel theo mẫu, áp cho dự án của mình', 'Bốn quy ước tính phải chốt: trước hay sau VAT, căn cứ hoa hồng', 'Mẫu đối soát hoa hồng theo kỳ với đại lý'], roles: ['bds', 'vh'], note: 'Mang theo chính sách bán hàng hiện tại của một dự án.' }
+  ];
+  static FILTERS = [['all', 'Tất cả'], ['chu', 'Chủ doanh nghiệp'], ['ql', 'Quản lý & trưởng phòng'], ['nv', 'Nhân viên văn phòng'], ['bds', 'Chủ đầu tư & sàn'], ['vh', 'Kế toán & vận hành']];
+  static FAQ = [
+    ['Công ty tôi không làm bất động sản, có học được không?', 'Được với Xưởng Phần Mềm Một Người: phương pháp áp dụng cho bất kỳ quy trình nội bộ nào đang chạy bằng Excel và Zalo. Khoá vận hành mở bán cũng dùng được cho ngành bán hàng có số lượng giới hạn qua nhiều đại lý: ô tô, tour, vé sự kiện.'],
+    ['Khoá có dạy dùng phần mềm của iHouzz không?', 'Không bắt buộc. Các khoá dạy cách làm việc; ví dụ minh hoạ lấy từ hệ thống iHouzz vì đó là thứ chúng tôi vận hành hằng ngày. Học viên dùng công cụ nào cũng áp dụng được.'],
+    ['Có học cho cả công ty được không?', 'Có, và đó là cách học chính của tầng 1. Lớp riêng cho một công ty, làm bài kiểm tra đầu vào và đầu ra cho từng nhân viên, cuối khoá chủ doanh nghiệp nhận bảng kết quả. Khoá tầng 2 cũng nhận lớp riêng. Ghi số người khi đăng ký.'],
+    ['Nên bắt đầu từ tầng nào?', 'Nhân viên bắt đầu ở tầng 1. Lãnh đạo nên học AI cho Lãnh đạo ở tầng 2 trước, để có quy chế dùng AI trước khi cho nhân viên dùng. Tầng 3 dành cho người đã có một bài toán cụ thể muốn tự làm.'],
+    ['Các khoá có nói về luật mới không?', 'Có, ở những khoá liên quan. Luật Bảo vệ dữ liệu cá nhân (Luật 91/2025/QH15) có hiệu lực từ 01/01/2026 và Luật Trí tuệ nhân tạo có hiệu lực từ 01/03/2026. Khoá dạy cách áp vào vận hành hằng ngày; đây không phải tư vấn pháp lý.'],
+    ['Khoá chưa có lịch thì đăng ký để làm gì?', 'Để vào danh sách chờ. Lớp mở khi đủ người; người trong danh sách được báo lịch và giữ chỗ trước.']
+  ];
+
+  scrollTo(el, off) {
+    if (!el) return;
+    const sc = (n => { while (n && n !== document.body) { const s = getComputedStyle(n).overflowY; if ((s === 'auto' || s === 'scroll') && n.scrollHeight > n.clientHeight) return n; n = n.parentElement; } return null; })(el.parentElement);
+    if (sc) sc.scrollTo({ top: sc.scrollTop + el.getBoundingClientRect().top - sc.getBoundingClientRect().top - off, behavior: 'smooth' });
+    else window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - off, behavior: 'smooth' });
+  }
+  setF(k) { return e => { const v = e.target.value; this.setState(s => ({ f: { ...s.f, [k]: v } })); }; }
+  copy(txt, key) {
+    const done = () => { this.setState({ copied: key }); clearTimeout(this.ct); this.ct = setTimeout(() => this.setState({ copied: '' }), 1800); };
+    try { navigator.clipboard.writeText(txt).then(done, done); } catch (e) { done(); }
+  }
+  pick(id) {
+    this.setState(s => ({ f: { ...s.f, khoa: id } }));
+    this.scrollTo(this.formRef.current, 80);
+  }
+  submit(e) {
+    e.preventDefault();
+    const f = this.state.f, C = Component.COURSES;
+    if (!f.ten.trim() || !f.dt.trim()) { this.setState({ err: true }); return; }
+    const c = C.find(x => x.id === f.khoa);
+    const or = v => v.trim() || '(không điền)';
+    const ticket = ['ĐĂNG KÝ iHOUZZ ACADEMY', 'Khoá: ' + (c ? c.name : 'Chưa rõ, cần tư vấn chọn khoá') + ' [' + f.khoa + ']', 'Họ tên: ' + f.ten.trim(), 'Điện thoại/Zalo: ' + f.dt.trim(), 'Email: ' + or(f.em), 'Vai trò: ' + f.vt, 'Công ty: ' + or(f.ct), 'Số người học: ' + (f.sl || '1'), 'Việc cần giải quyết: ' + or(f.ghi)].join('\n');
+    this.setState({ err: false, ticket });
+  }
+  renderVals() {
+    const { role, open, f, ticket, err, copied } = this.state;
+    const C = Component.COURSES, COMPANY = Component.COMPANY;
+    const st = { open: ['#e3f3ec', '#0e6b4f'], wait: ['#e6eff8', '#0b3f6b'], soon: ['#eef1f4', '#4a5868'] };
+    const mk = c => ({
+      ...c, law: c.law || '', detail: c.detail || '',
+      facts: c.facts.map(([k, v]) => ({ k, v })),
+      stBg: st[c.status][0], stFg: st[c.status][1],
+      border: c.flag ? '#1262a4' : '#dde2e7', shadow: c.flag ? '0 8px 24px -14px rgba(18,98,164,.45)' : 'none',
+      isOpen: c.status === 'open', notOpen: c.status !== 'open',
+      cta: c.status === 'open' ? 'Đăng ký khoá này' : c.statusText === COMPANY ? 'Đặt lớp cho công ty' : c.status === 'wait' ? 'Vào danh sách chờ' : 'Nhận thông báo lịch',
+      pick: () => this.pick(c.id)
+    });
+    const tierGroups = Component.TIERS.map(t => ({ ...t, items: C.filter(c => c.tier === t.n && (role === 'all' || c.roles.includes(role))).map(mk) })).filter(t => t.items.length);
+    const sel = C.find(x => x.id === f.khoa);
+    const hint = !sel ? 'iHouzz sẽ gợi ý khoá hợp nhất sau khi nghe bài toán.' : sel.status === 'open' ? 'Khoá đang mở: đăng ký này là giữ chỗ.' : sel.statusText === COMPANY ? 'Khoá đặt theo công ty: ghi số người học để nhận báo giá.' : 'Khoá chưa có lịch: đăng ký này là vào danh sách chờ.';
+    return {
+      tiers: Component.TIERS.map(t => ({ ...t, jump: () => this.scrollTo(document.getElementById(t.id), 90) })),
+      filters: Component.FILTERS.map(([k, label]) => { const on = role === k; return { label, on: String(on), bg: on ? '#0f1c2e' : '#fff', fg: on ? '#fff' : '#2c3a4a', bd: on ? '#0f1c2e' : '#c9d1da', pick: () => this.setState({ role: k }) }; }),
+      tierGroups, isEmpty: tierGroups.length === 0,
+      options: Component.TIERS.flatMap(t => C.filter(c => c.tier === t.n).map(c => ({ id: c.id, label: 'Tầng ' + t.n + ' · ' + c.name }))).concat([{ id: 'TV', label: 'Chưa rõ, cần tư vấn chọn khoá' }]),
+      f, hint, formRef: this.formRef,
+      setKhoa: this.setF('khoa'), setTen: this.setF('ten'), setDt: this.setF('dt'), setEm: this.setF('em'), setVt: this.setF('vt'), setCt: this.setF('ct'), setSl: this.setF('sl'), setGhi: this.setF('ghi'),
+      submit: e => this.submit(e),
+      note: err ? 'Cần họ tên và số điện thoại để iHouzz gọi lại.' : 'Phiếu tạo ra ngay bên dưới để anh chị gửi qua Zalo hoặc email.',
+      noteColor: err ? '#b3261e' : '#6b7888',
+      ticket, copyTicket: () => this.copy(ticket, 'ticket'), copyLabel: copied === 'ticket' ? 'Đã sao chép' : 'Sao chép phiếu',
+      copyPhone: () => this.copy('0964585584', 'phone'), phoneLabel: copied === 'phone' ? 'Đã sao chép' : 'Sao chép',
+      copyMail: () => this.copy('andy@ihouzz.com', 'mail'), mailLabel: copied === 'mail' ? 'Đã sao chép' : 'Sao chép',
+      faq: Component.FAQ.map(([q, a], i) => ({ q, a, open: open === i, mark: open === i ? '−' : '+', toggle: () => this.setState({ open: open === i ? -1 : i }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>
